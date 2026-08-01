@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!-- ============================================================
+   budaica.com — HOME ("The Garage")
+   Huy's personal space: progress, roadmap, latest log entries.
+   Content lives in data.js — this file is just the frame.
+   ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>budaica — Huy's garage · learn, log, get free</title>
+<meta name="description" content="Personal learning space of Huy Quoc Lieu — embedded engineer working toward automotive HIL testing. Hard work buys freedom.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ---------- home-specific ---------- */
+.hero-home{padding:1rem 0 2.5rem}
+.hero-home h1{font-size:clamp(1.9rem,4.6vw,2.8rem);font-weight:700;letter-spacing:-.025em;margin-bottom:.4rem}
+.hero-home .sub{font-family:var(--mono);font-size:.85rem;color:var(--ink-dim);margin-bottom:2rem}
+.hero-home .sub em{color:var(--amber-soft);font-style:normal}
+
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.9rem;margin-bottom:2.8rem}
+.statline{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.1rem;text-align:center}
+.statline .n{display:block;font-family:var(--mono);font-size:1.7rem;font-weight:700;color:var(--amber)}
+.statline .l{font-size:.72rem;color:var(--ink-dim)}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-bottom:2.8rem}
+@media(max-width:820px){.grid-2{grid-template-columns:1fr}}
+.card h2{font-family:var(--mono);font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:1.1rem;font-weight:500}
+
+/* currently learning */
+.cl-topic{font-size:1.25rem;font-weight:600;margin-bottom:.4rem}
+.cl-meta{font-family:var(--mono);font-size:.75rem;color:var(--ink-dim);margin-bottom:.8rem}
+.cl-note{font-size:.9rem;color:var(--ink-dim);font-weight:300;border-top:1px dashed var(--card-border);padding-top:.8rem}
+.cl-actions{margin-top:1rem}
+.cl-actions a{font-family:var(--mono);font-size:.78rem;text-decoration:none}
+.cl-actions a::after{content:" →"}
+
+/* roadmap */
+.progress{margin-bottom:1.4rem}
+.progress-label{font-family:var(--mono);font-size:.72rem;color:var(--ink-dim);margin-bottom:.45rem;letter-spacing:.1em}
+.progress-bar{height:8px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.progress-bar i{display:block;height:100%;background:linear-gradient(90deg,#c96f3f,var(--amber),var(--amber-soft));border-radius:4px;transition:width 1s ease}
+.phase{margin-bottom:1.2rem}
+.phase h3{font-size:.92rem;font-weight:600;display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.5rem}
+.phase-count{font-family:var(--mono);font-size:.68rem;color:var(--ink-dim)}
+.phase ul{list-style:none}
+.phase li{
+  font-size:.88rem;color:var(--ink-dim);font-weight:300;
+  padding:.3rem 0 .3rem .2rem;display:flex;align-items:center;gap:.6rem;
+}
+.phase li .box{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:16px;height:16px;min-width:16px;border-radius:4px;
+  border:1.5px solid var(--ink-dim);font-size:.65rem;color:#1a0f05;
+}
+.phase li.done{color:var(--ink);opacity:.75}
+.phase li.done .box{background:var(--amber);border-color:var(--amber);font-weight:700}
+.hint{font-family:var(--mono);font-size:.68rem;color:var(--ink-dim);margin-top:.4rem}
+.hint code{color:var(--amber-soft)}
+
+/* latest entries */
+.section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1.2rem}
+.section-head h2{font-family:var(--mono);font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500}
+.section-head a{font-family:var(--mono);font-size:.75rem;text-decoration:none;color:var(--ink-dim)}
+.section-head a:hover{color:var(--amber-soft)}
+.section-head a::after{content:" →"}
+</style>
+</head>
+<body>
+<div class="lamp"></div>
+
+<nav>
+  <a class="logo" href="index.html">huy<span>@</span>budaica<span>:~$</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="here">home</a></li>
+    <li><a href="notes.html">notes</a></li>
+    <li><a href="posts.html">posts</a></li>
+    <li><a href="resume.html">resume</a></li>
+  </ul>
+</nav>
+
+<main>
+  <div class="hero-home">
+    <div class="kicker">The garage · budaica.com</div>
+    <h1>Huy's space.</h1>
+    <div class="sub">log the day · track the learning · <em>watch the progress move</em></div>
+    <div class="wall">
+      <b>Hard work buys freedom.</b><br>
+      Freedom means being there when my family needs me.<br>
+      <span style="font-size:.85em">— the reason this page exists</span>
+    </div>
+  </div>
+
+  <div class="stats-row" id="stats"></div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>Currently learning</h2>
+      <div id="current"></div>
+      <div class="cl-actions"><a href="posts.html">related posts</a></div>
+    </div>
+    <div class="card">
+      <h2>The roadmap</h2>
+      <div id="roadmap"></div>
+      <div class="hint">tick items in <code>data.js</code> — the bar fills itself</div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <h2>Latest entries</h2>
+    <a href="notes.html">full log</a>
+  </div>
+  <div id="latest"></div>
+</main>
+
+<footer>
+  <div class="dtc">
+    <span class="prompt">tester&gt;</span> 22 F1 90 <span class="note"># readDataByIdentifier: who_is_this_engineer?</span><br>
+    <span class="resp">ECU&nbsp;&nbsp;&gt;</span> 62 F1 90 46 52 45 45 44 4F 4D<br>
+    <span class="note">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- decoded: "FREEDOM" · positive response · no DTCs stored</span>
+  </div>
+  <div>© 2026 Huy Quoc Lieu · budaica.com · night → dawn · hard work → freedom</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="render.js"></script>
+<script>
+  renderStats(document.getElementById("stats"));
+  renderCurrent(document.getElementById("current"));
+  renderRoadmap(document.getElementById("roadmap"));
+  renderLatest(document.getElementById("latest"), 4);
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!-- ============================================================
+   budaica.com — FIELD NOTES (the logbook)
+   Purpose-built like a real notebook: lined paper, margin line,
+   date stamps. Entries come from data.js — edit only that file.
+   ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Notes — budaica</title>
+<meta name="description" content="Huy's learning & life log — day by day on the road to freedom.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ---------- logbook styling ---------- */
+main{max-width:760px}
+.filters{margin-bottom:1.8rem}
+.count-line{font-family:var(--mono);font-size:.72rem;color:var(--ink-dim);margin-bottom:1.6rem;letter-spacing:.1em}
+
+/* each entry = a notebook page */
+.notebook .entry{
+  position:relative;
+  background:
+    repeating-linear-gradient(180deg,
+      transparent 0,
+      transparent 1.72rem,
+      rgba(255,255,255,.05) 1.72rem,
+      rgba(255,255,255,.05) calc(1.72rem + 1px)),
+    rgba(255,255,255,.028);
+  border:1px solid rgba(255,255,255,.07);
+  border-left:none;
+  border-radius:4px 12px 12px 4px;
+  padding:1.15rem 1.4rem 1.15rem 2rem;
+  margin-bottom:1.3rem;
+  line-height:1.72rem;
+}
+/* the notebook margin line */
+.notebook .entry::before{
+  content:"";position:absolute;top:0;bottom:0;left:1.15rem;width:2px;
+  background:rgba(242,166,90,.35);
+}
+.notebook .entry-date{
+  font-family:var(--mono);font-size:.78rem;font-weight:700;color:var(--amber);
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.notebook .entry-mood{margin-left:.2rem}
+.notebook .entry-text{font-weight:300;color:var(--ink)}
+.notebook .entry-tags{opacity:.85}
+</style>
+</head>
+<body>
+<div class="lamp"></div>
+
+<nav>
+  <a class="logo" href="index.html">huy<span>@</span>budaica<span>:~$</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">home</a></li>
+    <li><a href="notes.html" class="here">notes</a></li>
+    <li><a href="posts.html">posts</a></li>
+    <li><a href="resume.html">resume</a></li>
+  </ul>
+</nav>
+
+<main>
+  <div class="kicker">The logbook</div>
+  <h1 class="page-title">Field Notes</h1>
+  <div class="wall">
+    Written for myself, in the open. Some days are breakthroughs,
+    some are just <b>showing up</b>. Both count.
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div class="count-line" id="count"></div>
+  <div class="notebook" id="entries"></div>
+</main>
+
+<footer>
+  <div>© 2026 Huy Quoc Lieu · budaica.com · hard work → freedom</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="render.js"></script>
+<script>
+  var listEl = document.getElementById("entries");
+  renderAllEntries(listEl);
+  renderTagFilters(document.getElementById("filters"), listEl);
+  document.getElementById("count").textContent =
+    SITE_DATA.entries.length + " pages · started " + fmtDate(SITE_DATA.startedDate) + " · day " + daysSince(SITE_DATA.startedDate);
+</script>
+</body>
+</html>

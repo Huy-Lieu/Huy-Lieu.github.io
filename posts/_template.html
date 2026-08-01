@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!-- ============================================================
+   POST TEMPLATE — how to publish a new article:
+
+   1. Copy this file, rename it:  posts/my-topic-name.html
+      (keep the leading underscore ONLY on this template)
+   2. Fill in every spot marked  ▸▸ EDIT
+   3. Register it in data.js  →  the "posts" array:
+        { date:"2026-08-05", title:"My title",
+          file:"posts/my-topic-name.html",
+          summary:"One sentence.", tags:["learning"] }
+   4. Done — it appears on the posts page automatically.
+
+   Writing blocks you can use inside <article>:
+     <p>paragraph</p>
+     <h2>section title</h2>
+     <strong>important</strong>   <code>code_or_signal</code>
+     <div class="callout">key insight box</div>
+     <table><tr><th>..</th></tr><tr><td>..</td></tr></table>
+   ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>▸▸ EDIT: Post title — budaica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
+<style>
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#c96f3f,var(--amber));z-index:200}
+main{max-width:720px}
+.back{font-family:var(--mono);font-size:.78rem;text-decoration:none;color:var(--ink-dim);display:inline-block;margin-bottom:2rem}
+.back:hover{color:var(--amber-soft)}
+.post-head{margin-bottom:2.4rem}
+.post-head h1{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin:.6rem 0 .9rem}
+.post-meta{display:flex;gap:.8rem;align-items:center;font-family:var(--mono);font-size:.75rem;color:var(--ink-dim)}
+article{font-weight:300;font-size:1.03rem;line-height:1.85;color:var(--ink)}
+article p{margin-bottom:1.3rem}
+article h2{font-family:var(--mono);font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin:2.4rem 0 1rem;font-weight:500}
+article h2::before{content:"## "}
+article strong{font-weight:600;color:var(--amber-soft)}
+article code{font-family:var(--mono);font-size:.88em;color:var(--amber-soft);background:rgba(242,166,90,.1);padding:.1em .4em;border-radius:5px}
+.callout{border-left:3px solid var(--amber);background:var(--card);padding:1.1rem 1.3rem;border-radius:0 10px 10px 0;margin:1.6rem 0;font-size:.95rem}
+table{width:100%;border-collapse:collapse;margin:1.6rem 0;font-size:.9rem}
+th{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);text-align:left;padding:.6rem .8rem;border-bottom:2px solid var(--card-border)}
+td{padding:.6rem .8rem;border-bottom:1px solid var(--card-border);color:var(--ink-dim)}
+.endrule{margin:3rem 0 1.5rem;text-align:center;color:var(--amber);font-family:var(--mono);letter-spacing:.5em}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="lamp"></div>
+
+<nav>
+  <a class="logo" href="../index.html">huy<span>@</span>budaica<span>:~$</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html">home</a></li>
+    <li><a href="../notes.html">notes</a></li>
+    <li><a href="../posts.html" class="here">posts</a></li>
+    <li><a href="../resume.html">resume</a></li>
+  </ul>
+</nav>
+
+<main>
+  <a class="back" href="../posts.html">← all posts</a>
+
+  <div class="post-head">
+    <div class="kicker">Field notes · long form</div>
+    <h1>▸▸ EDIT: Your post title</h1>
+    <div class="post-meta"><span>▸▸ EDIT: 5 Aug 2026</span><span>·</span><span>▸▸ EDIT: tags</span><span>·</span><span>▸▸ EDIT: X min read</span></div>
+  </div>
+
+  <article>
+    <p>▸▸ EDIT: Opening — the question or the problem. One short paragraph.</p>
+
+    <h2>▸▸ EDIT: First section</h2>
+    <p>▸▸ EDIT: Explain it to future-you. Short paragraphs beat long ones.</p>
+
+    <div class="callout">▸▸ EDIT: The key insight — the one thing to remember.</div>
+
+    <p>▸▸ EDIT: Closing — why this matters for the road ahead.</p>
+
+    <div class="endrule">· · ·</div>
+  </article>
+
+  <a class="back" href="../posts.html">← all posts</a>
+</main>
+
+<footer>
+  <div>© 2026 Huy Quoc Lieu · budaica.com · hard work → freedom</div>
+</footer>
+
+<script>
+window.addEventListener("scroll", function(){
+  var h = document.documentElement;
+  var p = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById("progress").style.width = p + "%";
+});
+</script>
+</body>
+</html>

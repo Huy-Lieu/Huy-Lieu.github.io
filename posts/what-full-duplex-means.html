@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!-- ============================================================
+   POST · What full-duplex really means
+   (reader layout — narrow column, progress bar, focus)
+   ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What full-duplex really means — budaica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
+<style>
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#c96f3f,var(--amber));z-index:200}
+main{max-width:720px}
+.back{font-family:var(--mono);font-size:.78rem;text-decoration:none;color:var(--ink-dim);display:inline-block;margin-bottom:2rem}
+.back:hover{color:var(--amber-soft)}
+.post-head{margin-bottom:2.4rem}
+.post-head h1{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin:.6rem 0 .9rem}
+.post-meta{display:flex;gap:.8rem;align-items:center;font-family:var(--mono);font-size:.75rem;color:var(--ink-dim)}
+article{font-weight:300;font-size:1.03rem;line-height:1.85;color:var(--ink)}
+article p{margin-bottom:1.3rem}
+article h2{
+  font-family:var(--mono);font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--amber);margin:2.4rem 0 1rem;font-weight:500;
+}
+article h2::before{content:"## "}
+article strong{font-weight:600;color:var(--amber-soft)}
+article code{font-family:var(--mono);font-size:.88em;color:var(--amber-soft);background:rgba(242,166,90,.1);padding:.1em .4em;border-radius:5px}
+.callout{
+  border-left:3px solid var(--amber);background:var(--card);
+  padding:1.1rem 1.3rem;border-radius:0 10px 10px 0;margin:1.6rem 0;
+  font-size:.95rem;
+}
+table{width:100%;border-collapse:collapse;margin:1.6rem 0;font-size:.9rem}
+th{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);text-align:left;padding:.6rem .8rem;border-bottom:2px solid var(--card-border)}
+td{padding:.6rem .8rem;border-bottom:1px solid var(--card-border);color:var(--ink-dim)}
+td:first-child{color:var(--ink);font-weight:500}
+.endrule{margin:3rem 0 1.5rem;text-align:center;color:var(--amber);font-family:var(--mono);letter-spacing:.5em}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="lamp"></div>
+
+<nav>
+  <a class="logo" href="../index.html">huy<span>@</span>budaica<span>:~$</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html">home</a></li>
+    <li><a href="../notes.html">notes</a></li>
+    <li><a href="../posts.html" class="here">posts</a></li>
+    <li><a href="../resume.html">resume</a></li>
+  </ul>
+</nav>
+
+<main>
+  <a class="back" href="../posts.html">← all posts</a>
+
+  <div class="post-head">
+    <div class="kicker">Field notes · long form</div>
+    <h1>What full-duplex really means (and why SPI confused me)</h1>
+    <div class="post-meta"><span>30 Jul 2026</span><span>·</span><span>learning, SPI</span><span>·</span><span>4 min read</span></div>
+  </div>
+
+  <article>
+    <p>For months I nodded along when people said "SPI is full-duplex." Today I actually stopped and asked: <strong>full... of what?</strong> Turns out the answer is embarrassingly simple — and it made three protocols click at once.</p>
+
+    <h2>The one-sentence version</h2>
+    <p>Duplex describes <strong>who can talk, and when</strong>. That's it. Everything else is details.</p>
+
+    <h2>The three types, as humans</h2>
+    <p><strong>Simplex — a radio station.</strong> One side talks, the other can only listen. Forever. There's exactly one direction of data, like a broadcast tower to your car radio. In electronics: a one-way sensor line.</p>
+    <p><strong>Half-duplex — a walkie-talkie.</strong> Both sides <em>can</em> talk, but only one at a time. You say "over" and release the button. RS-485 buses work like this, and single-wire LIN is in this family too — everyone shares one line, so everyone must take turns.</p>
+    <p><strong>Full-duplex — a phone call.</strong> Both sides talk <em>at the same time</em>, and both hear each other continuously. No taking turns. This requires physically separate paths in each direction — and that last sentence is the key to SPI.</p>
+
+    <h2>Why SPI is full-duplex</h2>
+    <p>SPI has two separate data wires: <code>MOSI</code> (master out, slave in) and <code>MISO</code> (master in, slave out). Separate wires = separate paths = no need to take turns.</p>
+    <p>But here's the part that actually confused me: <strong>every clock pulse moves one bit in BOTH directions simultaneously.</strong> While the master shifts a command byte out on MOSI, the slave is shifting a byte back in on MISO — in the exact same 8 clock cycles. You cannot send without also receiving.</p>
+    <div class="callout">
+      This explains the classic beginner puzzle: "why do I send dummy bytes (<code>0xFF</code>) to read from a sensor?" Because the clock only ticks when the master transmits. Reading <em>is</em> transmitting — you send garbage out so the slave's data can clock in.
+    </div>
+
+    <h2>Cheat sheet for future me</h2>
+    <table>
+      <tr><th>Type</th><th>Human version</th><th>Directions</th><th>Example</th></tr>
+      <tr><td>Simplex</td><td>Radio station</td><td>One way, always</td><td>Broadcast, one-way sensor</td></tr>
+      <tr><td>Half-duplex</td><td>Walkie-talkie</td><td>Both ways, taking turns</td><td>RS-485, LIN</td></tr>
+      <tr><td>Full-duplex</td><td>Phone call</td><td>Both ways, at once</td><td>SPI, UART (TX+RX), Ethernet</td></tr>
+    </table>
+
+    <p>Filed under: things I pretended to know for too long. More of these coming — that's what this site is for.</p>
+
+    <div class="endrule">· · ·</div>
+  </article>
+
+  <a class="back" href="../posts.html">← all posts</a>
+</main>
+
+<footer>
+  <div>© 2026 Huy Quoc Lieu · budaica.com · hard work → freedom</div>
+</footer>
+
+<script>
+/* reading progress bar */
+window.addEventListener("scroll", function(){
+  var h = document.documentElement;
+  var p = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById("progress").style.width = p + "%";
+});
+</script>
+</body>
+</html>

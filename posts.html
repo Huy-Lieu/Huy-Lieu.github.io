@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!-- ============================================================
+   budaica.com — POSTS (longer articles)
+   The list comes from data.js (the "posts" array).
+   To add one: write posts/your-file.html (copy the template in
+   posts/), then register it in data.js.
+   ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Posts — budaica</title>
+<meta name="description" content="Longer write-ups from Huy's learning journey — embedded protocols, CAN, automotive testing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.postcard{
+  display:block;text-decoration:none;color:inherit;
+  background:var(--card);border:1px solid var(--card-border);border-radius:14px;
+  padding:1.5rem 1.7rem;margin-bottom:1.1rem;transition:transform .25s,border-color .25s;
+}
+.postcard:hover{transform:translateY(-3px);border-color:rgba(242,166,90,.5)}
+.postcard-head{display:flex;align-items:center;gap:.7rem;margin-bottom:.5rem}
+.postcard h3{font-size:1.15rem;font-weight:600;margin-bottom:.4rem}
+.postcard p{font-size:.9rem;color:var(--ink-dim);font-weight:300}
+</style>
+</head>
+<body>
+<div class="lamp"></div>
+
+<nav>
+  <a class="logo" href="index.html">huy<span>@</span>budaica<span>:~$</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">home</a></li>
+    <li><a href="notes.html">notes</a></li>
+    <li><a href="posts.html" class="here">posts</a></li>
+    <li><a href="resume.html">resume</a></li>
+  </ul>
+</nav>
+
+<main>
+  <div class="kicker">Long form</div>
+  <h1 class="page-title">Posts</h1>
+  <div class="wall">
+    Field notes are for every day. Posts are for when something
+    <b>finally clicks</b> — written so future-me can relearn it in five minutes.
+  </div>
+  <div id="postlist"></div>
+</main>
+
+<footer>
+  <div>© 2026 Huy Quoc Lieu · budaica.com · hard work → freedom</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="render.js"></script>
+<script>
+  renderPosts(document.getElementById("postlist"));
+</script>
+</body>
+</html>
