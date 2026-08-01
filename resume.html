@@ -99,9 +99,18 @@ h2{font-size:clamp(1.7rem,3.6vw,2.3rem);font-weight:600;letter-spacing:-.02em;ma
 .bench .ok{color:#7ee2a8}
 .bench .dim{color:#6b7889}
 .bench .sum{display:block;margin-top:.7rem;padding-top:.7rem;border-top:1px dashed #3a4757;color:#f2a65a;font-size:.7rem;letter-spacing:.06em}
-/* CAN trace divider */
-.trace{display:block;margin-top:3rem;opacity:.4}
-@media print{.bench,.trace{display:none}}
+/* bench topology figure */
+.benchfig{
+  background:#1d2634;border-radius:16px;padding:1.6rem 1.6rem 1.1rem;
+  box-shadow:0 14px 34px rgba(29,38,52,.22);margin:0 0 2.2rem;
+}
+.benchfig svg{width:100%;height:auto;display:block}
+.benchfig figcaption{
+  font-family:var(--mono);font-size:.72rem;color:#8a94a5;
+  letter-spacing:.08em;margin-top:.9rem;text-align:center;
+}
+.benchfig figcaption b{color:#f2a65a;font-weight:500}
+@media print{.bench,.benchfig{display:none}}
 .hero-tag{
   display:inline-block;
   font-family:var(--mono);font-size:.78rem;color:var(--ink-dim);
@@ -314,9 +323,6 @@ footer .fine{color:#8a94a5}
       <span class="sum">run 47/50 · 20+ defects caught before vehicle integration</span>
     </div>
   </div>
-  <svg class="trace" width="640" height="30" viewBox="0 0 640 30" fill="none" aria-hidden="true">
-    <polyline points="0,22 55,22 55,8 135,8 135,22 215,22 215,8 295,8 295,22 375,22 375,8 455,8 455,22 535,22 535,8 615,8 615,22 640,22" stroke="#b5701c" stroke-width="1.6"/>
-  </svg>
 </section>
 
 <!-- ================= STATS ================= -->
@@ -368,6 +374,88 @@ footer .fine{color:#8a94a5}
       </ul>
     </div>
   </div>
+
+  <figure class="benchfig reveal">
+    <svg viewBox="0 0 1080 380" role="img" aria-label="HIL bench topology: CANoe PC and power supply feeding a CAN interface and VT System rack, through a breakout panel to the ECU under test, with a JTAG debug probe">
+      <defs>
+        <marker id="arrA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f2a65a"/></marker>
+        <marker id="arrR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e06a5a"/></marker>
+        <marker id="arrG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a94a5"/></marker>
+      </defs>
+      <g font-family="'JetBrains Mono',monospace">
+        <!-- wires -->
+        <line x1="210" y1="108" x2="276" y2="108" stroke="#8a94a5" stroke-width="1.5" marker-end="url(#arrG)"/>
+        <text x="243" y="98" text-anchor="middle" font-size="10.5" fill="#8a94a5">USB</text>
+        <line x1="420" y1="113" x2="496" y2="113" stroke="#f2a65a" stroke-width="2" marker-end="url(#arrA)"/>
+        <text x="460" y="103" text-anchor="middle" font-size="10.5" fill="#f2a65a">CAN</text>
+        <line x1="210" y1="272" x2="496" y2="272" stroke="#e06a5a" stroke-width="2" marker-end="url(#arrR)"/>
+        <text x="355" y="262" text-anchor="middle" font-size="10.5" fill="#e06a5a">VBatt sweep 9–16.5V</text>
+        <line x1="690" y1="113" x2="741" y2="113" stroke="#f2a65a" stroke-width="2" marker-end="url(#arrA)"/>
+        <text x="716" y="103" text-anchor="middle" font-size="10.5" fill="#f2a65a">I/O·CAN</text>
+        <path d="M690,200 Q750,216 812,170" stroke="#e06a5a" stroke-width="1.5" stroke-dasharray="5 4" fill="none" marker-end="url(#arrR)"/>
+        <text x="756" y="228" text-anchor="middle" font-size="10.5" fill="#e06a5a">fault injection</text>
+        <line x1="895" y1="105" x2="931" y2="105" stroke="#f2a65a" stroke-width="2" marker-end="url(#arrA)"/>
+        <text x="915" y="95" text-anchor="middle" font-size="10.5" fill="#f2a65a">CAN</text>
+        <line x1="895" y1="140" x2="931" y2="140" stroke="#8a94a5" stroke-width="1.5" marker-end="url(#arrG)"/>
+        <text x="914" y="133" text-anchor="middle" font-size="10.5" fill="#8a94a5">I/O</text>
+        <line x1="997" y1="252" x2="997" y2="184" stroke="#8a94a5" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arrG)"/>
+        <text x="1007" y="220" font-size="10.5" fill="#8a94a5">JTAG</text>
+        <!-- CANoe PC -->
+        <rect x="40" y="60" width="170" height="96" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
+        <text x="125" y="92" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">CANoe PC</text>
+        <text x="125" y="112" text-anchor="middle" font-size="11" fill="#8a94a5">CAPL · vTESTstudio</text>
+        <text x="125" y="129" text-anchor="middle" font-size="11" fill="#8a94a5">test automation</text>
+        <!-- PSU -->
+        <rect x="40" y="230" width="170" height="84" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
+        <text x="125" y="258" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">bench PSU</text>
+        <text x="125" y="278" text-anchor="middle" font-size="11" fill="#8a94a5">VBatt supply</text>
+        <text x="125" y="295" text-anchor="middle" font-size="11" fill="#8a94a5">sweep / brown-out</text>
+        <!-- CAN interface -->
+        <rect x="280" y="84" width="140" height="58" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
+        <text x="350" y="110" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">CAN interface</text>
+        <text x="350" y="127" text-anchor="middle" font-size="11" fill="#8a94a5">USB ↔ CAN-FD</text>
+        <!-- VT System rack -->
+        <rect x="500" y="50" width="190" height="244" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
+        <text x="595" y="78" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">VT System rack</text>
+        <rect x="518" y="96" width="28" height="118" rx="4" fill="#1a2230" stroke="#3d4a5e"/>
+        <rect x="556" y="96" width="28" height="118" rx="4" fill="#1a2230" stroke="#3d4a5e"/>
+        <rect x="594" y="96" width="28" height="118" rx="4" fill="#1a2230" stroke="#3d4a5e"/>
+        <rect x="632" y="96" width="28" height="118" rx="4" fill="#1a2230" stroke="#3d4a5e"/>
+        <circle cx="532" cy="110" r="2.4" fill="#f2a65a"/><circle cx="532" cy="122" r="2.4" fill="#f2a65a"/><circle cx="532" cy="134" r="2.4" fill="#3d4a5e"/>
+        <circle cx="570" cy="110" r="2.4" fill="#f2a65a"/><circle cx="570" cy="122" r="2.4" fill="#3d4a5e"/><circle cx="570" cy="134" r="2.4" fill="#3d4a5e"/>
+        <circle cx="608" cy="110" r="2.4" fill="#f2a65a"/><circle cx="608" cy="122" r="2.4" fill="#f2a65a"/><circle cx="608" cy="134" r="2.4" fill="#f2a65a"/>
+        <circle cx="646" cy="110" r="2.4" fill="#7ee2a8"/><circle cx="646" cy="122" r="2.4" fill="#3d4a5e"/><circle cx="646" cy="134" r="2.4" fill="#3d4a5e"/>
+        <text x="595" y="240" text-anchor="middle" font-size="11" fill="#8a94a5">real-time I/O</text>
+        <text x="595" y="257" text-anchor="middle" font-size="11" fill="#8a94a5">fault insertion</text>
+        <text x="595" y="274" text-anchor="middle" font-size="11" fill="#8a94a5">power control</text>
+        <!-- breakout panel -->
+        <rect x="745" y="84" width="150" height="84" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
+        <text x="820" y="110" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">breakout + load</text>
+        <text x="820" y="128" text-anchor="middle" font-size="11" fill="#8a94a5">terminal taps</text>
+        <text x="820" y="145" text-anchor="middle" font-size="11" fill="#8a94a5">signal access</text>
+        <!-- ECU -->
+        <rect x="935" y="70" width="125" height="110" rx="10" fill="#232e3f" stroke="#f2a65a" stroke-width="1.8"/>
+        <text x="997" y="96" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">ECU (DUT)</text>
+        <text x="997" y="114" text-anchor="middle" font-size="11" fill="#8a94a5">PAS · PSL · SDW</text>
+        <text x="997" y="131" text-anchor="middle" font-size="11" fill="#8a94a5">SPC5 PowerPC</text>
+        <rect x="963" y="146" width="70" height="20" rx="3" fill="none" stroke="#f2a65a" stroke-width="1.2"/>
+        <line x1="957" y1="151" x2="963" y2="151" stroke="#f2a65a" stroke-width="1.2"/><line x1="957" y1="161" x2="963" y2="161" stroke="#f2a65a" stroke-width="1.2"/>
+        <line x1="1033" y1="151" x2="1039" y2="151" stroke="#f2a65a" stroke-width="1.2"/><line x1="1033" y1="161" x2="1039" y2="161" stroke="#f2a65a" stroke-width="1.2"/>
+        <!-- JTAG probe -->
+        <rect x="935" y="252" width="125" height="62" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
+        <text x="997" y="278" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">JTAG probe</text>
+        <text x="997" y="295" text-anchor="middle" font-size="11" fill="#8a94a5">flash &amp; debug</text>
+        <!-- legend -->
+        <line x1="40" y1="345" x2="82" y2="345" stroke="#f2a65a" stroke-width="2"/>
+        <text x="92" y="349" font-size="10.5" fill="#c7d2e3">CAN / CAN-FD</text>
+        <line x1="215" y1="345" x2="257" y2="345" stroke="#e06a5a" stroke-width="2"/>
+        <text x="267" y="349" font-size="10.5" fill="#c7d2e3">VBatt power</text>
+        <line x1="390" y1="345" x2="432" y2="345" stroke="#8a94a5" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <text x="442" y="349" font-size="10.5" fill="#c7d2e3">control · debug</text>
+      </g>
+    </svg>
+    <figcaption><b>fig.01</b> — HIL bench topology · ADAS validation (CANoe · VT System · fault injection · JTAG debug)</figcaption>
+  </figure>
 
   <div class="xp reveal">
     <div class="side">
