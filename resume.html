@@ -81,7 +81,27 @@ h2{font-size:clamp(1.7rem,3.6vw,2.3rem);font-weight:600;letter-spacing:-.02em;ma
   *{animation:none!important}
 }
 /* ---------------- HERO ---------------- */
-#hero{max-width:1080px;padding-top:9rem;padding-bottom:3.5rem}
+#hero{max-width:1080px;padding-top:9rem;padding-bottom:3rem}
+.hero-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:3rem;align-items:center}
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr}}
+/* bench terminal card */
+.bench{
+  background:#1d2634;border-radius:14px;padding:1.35rem 1.5rem;
+  font-family:var(--mono);font-size:.74rem;line-height:1.9;color:#c7d2e3;
+  box-shadow:0 14px 34px rgba(29,38,52,.22);
+}
+.bench .bbar{display:flex;align-items:center;gap:.42rem;margin-bottom:1rem}
+.bench .bbar i{width:9px;height:9px;border-radius:50%;background:#3a4757}
+.bench .bbar i:first-child{background:var(--amber)}
+.bench .bbar span{margin-left:.5rem;font-size:.66rem;letter-spacing:.14em;color:#8a94a5}
+.bench .req{color:#ffd9a0}
+.bench .res{color:#c7d2e3}
+.bench .ok{color:#7ee2a8}
+.bench .dim{color:#6b7889}
+.bench .sum{display:block;margin-top:.7rem;padding-top:.7rem;border-top:1px dashed #3a4757;color:#f2a65a;font-size:.7rem;letter-spacing:.06em}
+/* CAN trace divider */
+.trace{display:block;margin-top:3rem;opacity:.4}
+@media print{.bench,.trace{display:none}}
 .hero-tag{
   display:inline-block;
   font-family:var(--mono);font-size:.78rem;color:var(--ink-dim);
@@ -110,10 +130,10 @@ h2{font-size:clamp(1.7rem,3.6vw,2.3rem);font-weight:600;letter-spacing:-.02em;ma
 .btn-ghost:hover{border-color:var(--amber);color:var(--amber-strong)}
 /* ---------------- STATS ---------------- */
 #stats{padding-top:1rem;padding-bottom:2.5rem}
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:.8rem}
 .stat{
   background:var(--panel);border:1px solid var(--line);border-radius:12px;
-  padding:1.3rem 1.1rem;text-align:center;
+  padding:1.25rem .8rem;text-align:center;
   box-shadow:0 1px 3px rgba(29,38,52,.05);
 }
 .stat .num{font-family:var(--mono);font-size:clamp(1.6rem,3.2vw,2.1rem);font-weight:700;color:var(--amber-strong);letter-spacing:-.02em}
@@ -267,29 +287,47 @@ footer .fine{color:#8a94a5}
 
 <!-- ================= HERO ================= -->
 <section id="hero">
-  <div class="hero-tag">// resume.budaica.com &nbsp;·&nbsp; <b>status: open_to_work</b></div>
-  <h1>Quoc Huy Lieu</h1>
-  <div class="hero-role">Embedded System Test Engineer — <em>ADAS · HIL Validation</em> · UDS Diagnostics · Test Automation</div>
-  <div class="seeking">seeking: <b>HIL / Bench Test Engineer · Validation Engineer · Diagnostics Engineer</b><br>
-  <span class="loc">based in Fullerton, CA → open to anywhere in the US</span></div>
-  <p class="statement">
-    <span class="l1">Hard work buys freedom.</span>
-    <span class="l2">Freedom means being there when my family needs me.</span>
-  </p>
-  <div class="hero-cta">
-    <a class="btn btn-solid" href="#experience">View experience ↓</a>
-    <a class="btn btn-ghost" href="Quoc_Huy_Lieu_Resume.pdf" target="_blank" rel="noopener">resume.pdf</a>
+  <div class="hero-grid">
+    <div>
+      <div class="hero-tag">// resume.budaica.com &nbsp;·&nbsp; <b>status: open_to_work</b></div>
+      <h1>Quoc Huy Lieu</h1>
+      <div class="hero-role">Embedded System Test Engineer — <em>ADAS · HIL Validation</em> · UDS Diagnostics · Test Automation</div>
+      <div class="seeking">seeking: <b>HIL / Bench Test Engineer · Validation Engineer · Diagnostics Engineer</b><br>
+      <span class="loc">based in Fullerton, CA → open to anywhere in the US</span></div>
+      <p class="statement">
+        <span class="l1">Hard work buys freedom.</span>
+        <span class="l2">Freedom means being there when my family needs me.</span>
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-solid" href="#experience">View experience ↓</a>
+        <a class="btn btn-ghost" href="Quoc_Huy_Lieu_Resume.pdf" target="_blank" rel="noopener">resume.pdf</a>
+      </div>
+    </div>
+    <div class="bench">
+      <div class="bbar"><i></i><i></i><i></i><span>HIL BENCH · ADAS_PAS · CANoe</span></div>
+      <span class="req">tester&gt;</span> 10 03 <span class="dim"># extended session</span><br>
+      <span class="res">ECU&nbsp;&nbsp;&gt;</span> 50 03 &nbsp;<span class="ok">✓ session entered</span><br>
+      <span class="req">tester&gt;</span> 19 0A <span class="dim"># readDTCInformation</span><br>
+      <span class="res">ECU&nbsp;&nbsp;&gt;</span> 59 0A FF C1 40 87 &nbsp;<span class="ok">✓ DTC captured</span><br>
+      <span class="req">tester&gt;</span> fault_inject(VBatt 16.5V → 9V)<br>
+      <span class="res">ECU&nbsp;&nbsp;&gt;</span> heal-path transition &nbsp;<span class="ok">✓ PASS</span><br>
+      <span class="sum">run 47/50 · 20+ defects caught before vehicle integration</span>
+    </div>
   </div>
+  <svg class="trace" width="640" height="30" viewBox="0 0 640 30" fill="none" aria-hidden="true">
+    <polyline points="0,22 55,22 55,8 135,8 135,22 215,22 215,8 295,8 295,22 375,22 375,8 455,8 455,22 535,22 535,8 615,8 615,22 640,22" stroke="#b5701c" stroke-width="1.6"/>
+  </svg>
 </section>
 
 <!-- ================= STATS ================= -->
 <section id="stats" class="reveal">
   <div class="stat-grid">
-    <div class="stat"><div class="num" data-count="20" data-suffix="+">0</div><div class="lbl">Defects caught pre-integration</div></div>
-    <div class="stat"><div class="num" data-count="50" data-suffix="+">0</div><div class="lbl">UDS test cases designed</div></div>
+    <div class="stat"><div class="num" data-count="20" data-suffix="+">0</div><div class="lbl">Defects caught on the HIL bench</div></div>
+    <div class="stat"><div class="num" data-count="50" data-suffix="+">0</div><div class="lbl">UDS cases designed &amp; automated</div></div>
     <div class="stat"><div class="num" data-count="60" data-suffix="%">0</div><div class="lbl">Diagnostic defects reduced</div></div>
-    <div class="stat"><div class="num" data-count="2556" data-suffix="">0</div><div class="lbl">FPGA configs characterized</div></div>
-    <div class="stat"><div class="num" data-count="2" data-suffix="">0</div><div class="lbl">IEEE publications</div></div>
+    <div class="stat"><div class="num" data-count="50" data-suffix="%">0</div><div class="lbl">Bench setup time cut</div></div>
+    <div class="stat"><div class="num" data-count="5" data-suffix="+">0</div><div class="lbl">DTC faults via fault injection</div></div>
+    <div class="stat"><div class="num" data-count="2556" data-suffix="">0</div><div class="lbl">Bench configurations automated</div></div>
   </div>
 </section>
 
