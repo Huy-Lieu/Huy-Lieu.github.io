@@ -110,7 +110,53 @@ h2{font-size:clamp(1.7rem,3.6vw,2.3rem);font-weight:600;letter-spacing:-.02em;ma
   letter-spacing:.08em;margin-top:.9rem;text-align:center;
 }
 .benchfig figcaption b{color:#f2a65a;font-weight:500}
-@media print{.bench,.benchfig{display:none}}
+@media print{.bench,.benchfig,.navpal,.pal,.toast{display:none}}
+/* bench typing + playground */
+.bbody{min-height:14.5em;overflow:hidden}
+.bl{white-space:nowrap}
+.caret{display:inline-block;width:.5em;height:1em;background:#f2a65a;vertical-align:-.12em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.bench-try{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;margin-top:.9rem;padding-top:.8rem;border-top:1px dashed #3a4757;opacity:0;transform:translateY(4px);transition:opacity .4s ease,transform .4s ease;pointer-events:none}
+.bench-try.on{opacity:1;transform:none;pointer-events:auto}
+.bench-try .try-lbl{font-size:.64rem;letter-spacing:.14em;color:#8a94a5}
+.bench-try button{font:inherit;font-size:.68rem;letter-spacing:.05em;color:#ffd9a0;background:#232e3f;border:1px solid #3d4a5e;border-radius:6px;padding:.3rem .62rem;cursor:pointer;transition:border-color .15s,color .15s,transform .1s}
+.bench-try button:hover{border-color:#f2a65a;color:#f2a65a}
+.bench-try button:active{transform:translateY(1px)}
+.bench-try button.replay{margin-left:auto;color:#8a94a5}
+/* fig.01 interactive tour */
+.benchfig .box{transition:filter .18s ease,stroke .18s ease}
+.benchfig .box.glow{stroke:#f2a65a;filter:drop-shadow(0 0 5px rgba(242,166,90,.75))}
+.benchfig .hit{fill:#fff;opacity:0;cursor:pointer}
+.figtip{margin-top:.9rem;padding:.55rem .9rem;border:1px dashed #3d4a5e;border-radius:8px;font-family:var(--mono);font-size:.74rem;color:#c7d2e3;min-height:2.1em;display:flex;align-items:center;transition:border-color .2s}
+.figtip b{color:#f2a65a;font-weight:500}
+.figtip.live{border-color:#f2a65a}
+.figtip .ft-hint{color:#6b7889}
+/* case file */
+.case{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:12px;padding:1.35rem 1.6rem;margin:0 0 2.6rem;box-shadow:0 4px 18px rgba(29,38,52,.06)}
+.case-tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;color:var(--amber-strong);margin-bottom:.55rem}
+.case h3{margin:0 0 .55rem;font-size:1.05rem}
+.case p{margin:0;color:var(--ink-dim);font-size:.92rem;line-height:1.65}
+.case p strong{color:var(--ink)}
+.case-flow{margin-top:.9rem;display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;font-family:var(--mono);font-size:.7rem;color:var(--amber-strong)}
+.case-flow span{background:var(--amber-bg);border:1px solid #efdfc0;border-radius:6px;padding:.2rem .55rem}
+/* nav palette trigger */
+.navpal{font-family:var(--mono);font-size:.7rem;color:var(--ink-dim);background:none;border:1px solid var(--line);border-radius:6px;padding:.14rem .55rem;cursor:pointer;transition:color .15s,border-color .15s}
+.navpal:hover{color:var(--amber-strong);border-color:var(--amber)}
+/* command palette */
+.pal{position:fixed;inset:0;background:rgba(29,38,52,.45);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;padding-top:18vh;z-index:90}
+.pal.on{display:flex}
+.pal-box{width:min(520px,92vw);background:#1d2634;border:1px solid #3d4a5e;border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.35);font-family:var(--mono);overflow:hidden}
+.pal-head{display:flex;align-items:center;gap:.5rem;padding:.85rem 1rem;border-bottom:1px solid #3a4757;color:#8a94a5;font-size:.8rem}
+.pal-head input{flex:1;background:none;border:none;outline:none;color:#e8ecf4;font:inherit;caret-color:#f2a65a;min-width:0}
+.pal-list{list-style:none;margin:0;padding:.4rem;max-height:46vh;overflow:auto}
+.pal-list li{display:flex;justify-content:space-between;gap:1rem;padding:.5rem .7rem;border-radius:8px;color:#c7d2e3;font-size:.78rem;cursor:pointer}
+.pal-list li em{font-style:normal;color:#6b7889;font-size:.68rem}
+.pal-list li.sel{background:#232e3f;color:#ffd9a0}
+.pal-foot{padding:.5rem 1rem;border-top:1px solid #3a4757;color:#6b7889;font-size:.64rem;letter-spacing:.08em}
+/* uds toast */
+.toast{position:fixed;right:1.2rem;bottom:1.2rem;z-index:95;background:#1d2634;border:1px solid #3d4a5e;border-radius:12px;padding:.9rem 1.1rem;font-family:var(--mono);font-size:.72rem;line-height:1.8;color:#c7d2e3;box-shadow:0 16px 40px rgba(0,0,0,.3);opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;pointer-events:none}
+.toast.on{opacity:1;transform:none}
+.toast .req{color:#ffd9a0}.toast .ok{color:#7ee2a8}.toast .dim{color:#6b7889}
 .hero-tag{
   display:inline-block;
   font-family:var(--mono);font-size:.78rem;color:var(--ink-dim);
@@ -291,6 +337,7 @@ footer .fine{color:#8a94a5}
     <li><a href="#work">projects</a></li>
     <li><a href="#toolbox">skills</a></li>
     <li><a href="#contact">contact</a></li>
+    <li><button type="button" class="navpal" id="navPal" title="quick nav — press ` or Ctrl+K">goto :_</button></li>
   </ul>
 </nav>
 
@@ -314,13 +361,22 @@ footer .fine{color:#8a94a5}
     </div>
     <div class="bench">
       <div class="bbar"><i></i><i></i><i></i><span>HIL BENCH · ADAS_PAS · CANoe</span></div>
-      <span class="req">tester&gt;</span> 10 03 <span class="dim"># extended session</span><br>
-      <span class="res">ECU&nbsp;&nbsp;&gt;</span> 50 03 &nbsp;<span class="ok">✓ session entered</span><br>
-      <span class="req">tester&gt;</span> 19 0A <span class="dim"># readDTCInformation</span><br>
-      <span class="res">ECU&nbsp;&nbsp;&gt;</span> 59 0A FF C1 40 87 &nbsp;<span class="ok">✓ DTC captured</span><br>
-      <span class="req">tester&gt;</span> fault_inject(VBatt 16.5V → 9V)<br>
-      <span class="res">ECU&nbsp;&nbsp;&gt;</span> heal-path transition &nbsp;<span class="ok">✓ PASS</span><br>
-      <span class="sum">run 47/50 · 20+ defects caught before vehicle integration</span>
+      <div class="bbody" id="benchTerm">
+        <div class="bl"><span class="req">tester&gt;</span> 10 03 <span class="dim"># extended session</span></div>
+        <div class="bl"><span class="res">ECU&nbsp;&nbsp;&gt;</span> 50 03 &nbsp;<span class="ok">✓ session entered</span></div>
+        <div class="bl"><span class="req">tester&gt;</span> 19 0A <span class="dim"># readDTCInformation</span></div>
+        <div class="bl"><span class="res">ECU&nbsp;&nbsp;&gt;</span> 59 0A FF C1 40 87 &nbsp;<span class="ok">✓ DTC captured</span></div>
+        <div class="bl"><span class="req">tester&gt;</span> fault_inject(VBatt 16.5V → 9V)</div>
+        <div class="bl"><span class="res">ECU&nbsp;&nbsp;&gt;</span> heal-path transition &nbsp;<span class="ok">✓ PASS</span></div>
+        <span class="sum">run 47/50 · 20+ defects caught before vehicle integration</span>
+      </div>
+      <div class="bench-try" id="benchTry">
+        <span class="try-lbl">try it →</span>
+        <button type="button" data-scn="session">10 03</button>
+        <button type="button" data-scn="vin">22 F1 90</button>
+        <button type="button" data-scn="fault">fault_inject</button>
+        <button type="button" data-scn="boot" class="replay">↺ boot</button>
+      </div>
     </div>
   </div>
 </section>
@@ -392,7 +448,7 @@ footer .fine{color:#8a94a5}
         <text x="355" y="262" text-anchor="middle" font-size="10.5" fill="#e06a5a">VBatt sweep 9–16.5V</text>
         <line x1="690" y1="113" x2="741" y2="113" stroke="#f2a65a" stroke-width="2" marker-end="url(#arrA)"/>
         <text x="716" y="103" text-anchor="middle" font-size="10.5" fill="#f2a65a">I/O·CAN</text>
-        <path d="M690,200 Q750,216 812,170" stroke="#e06a5a" stroke-width="1.5" stroke-dasharray="5 4" fill="none" marker-end="url(#arrR)"/>
+        <path class="box" id="bx-fault" d="M690,200 Q750,216 812,170" stroke="#e06a5a" stroke-width="1.5" stroke-dasharray="5 4" fill="none" marker-end="url(#arrR)"/>
         <text x="756" y="228" text-anchor="middle" font-size="10.5" fill="#e06a5a">fault injection</text>
         <line x1="895" y1="105" x2="931" y2="105" stroke="#f2a65a" stroke-width="2" marker-end="url(#arrA)"/>
         <text x="915" y="95" text-anchor="middle" font-size="10.5" fill="#f2a65a">CAN</text>
@@ -401,21 +457,21 @@ footer .fine{color:#8a94a5}
         <line x1="997" y1="252" x2="997" y2="184" stroke="#8a94a5" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arrG)"/>
         <text x="1007" y="220" font-size="10.5" fill="#8a94a5">JTAG</text>
         <!-- CANoe PC -->
-        <rect x="40" y="60" width="170" height="96" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
+        <rect class="box" id="bx-pc" x="40" y="60" width="170" height="96" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
         <text x="125" y="92" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">CANoe PC</text>
         <text x="125" y="112" text-anchor="middle" font-size="11" fill="#8a94a5">CAPL · vTESTstudio</text>
         <text x="125" y="129" text-anchor="middle" font-size="11" fill="#8a94a5">test automation</text>
         <!-- PSU -->
-        <rect x="40" y="230" width="170" height="84" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
+        <rect class="box" id="bx-psu" x="40" y="230" width="170" height="84" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
         <text x="125" y="258" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">bench PSU</text>
         <text x="125" y="278" text-anchor="middle" font-size="11" fill="#8a94a5">VBatt supply</text>
         <text x="125" y="295" text-anchor="middle" font-size="11" fill="#8a94a5">sweep / brown-out</text>
         <!-- CAN interface -->
-        <rect x="280" y="84" width="140" height="58" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
+        <rect class="box" id="bx-iface" x="280" y="84" width="140" height="58" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
         <text x="350" y="110" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">CAN interface</text>
         <text x="350" y="127" text-anchor="middle" font-size="11" fill="#8a94a5">USB ↔ CAN-FD</text>
         <!-- VT System rack -->
-        <rect x="500" y="50" width="190" height="244" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
+        <rect class="box" id="bx-rack" x="500" y="50" width="190" height="244" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
         <text x="595" y="78" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">VT System rack</text>
         <rect x="518" y="96" width="28" height="118" rx="4" fill="#1a2230" stroke="#3d4a5e"/>
         <rect x="556" y="96" width="28" height="118" rx="4" fill="#1a2230" stroke="#3d4a5e"/>
@@ -429,12 +485,12 @@ footer .fine{color:#8a94a5}
         <text x="595" y="257" text-anchor="middle" font-size="11" fill="#8a94a5">fault insertion</text>
         <text x="595" y="274" text-anchor="middle" font-size="11" fill="#8a94a5">power control</text>
         <!-- breakout panel -->
-        <rect x="745" y="84" width="150" height="84" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
+        <rect class="box" id="bx-bo" x="745" y="84" width="150" height="84" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
         <text x="820" y="110" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">breakout + load</text>
         <text x="820" y="128" text-anchor="middle" font-size="11" fill="#8a94a5">terminal taps</text>
         <text x="820" y="145" text-anchor="middle" font-size="11" fill="#8a94a5">signal access</text>
         <!-- ECU -->
-        <rect x="935" y="70" width="125" height="110" rx="10" fill="#232e3f" stroke="#f2a65a" stroke-width="1.8"/>
+        <rect class="box" id="bx-ecu" x="935" y="70" width="125" height="110" rx="10" fill="#232e3f" stroke="#f2a65a" stroke-width="1.8"/>
         <text x="997" y="96" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">ECU (DUT)</text>
         <text x="997" y="114" text-anchor="middle" font-size="11" fill="#8a94a5">PAS · PSL · SDW</text>
         <text x="997" y="131" text-anchor="middle" font-size="11" fill="#8a94a5">SPC5 PowerPC</text>
@@ -442,7 +498,7 @@ footer .fine{color:#8a94a5}
         <line x1="957" y1="151" x2="963" y2="151" stroke="#f2a65a" stroke-width="1.2"/><line x1="957" y1="161" x2="963" y2="161" stroke="#f2a65a" stroke-width="1.2"/>
         <line x1="1033" y1="151" x2="1039" y2="151" stroke="#f2a65a" stroke-width="1.2"/><line x1="1033" y1="161" x2="1039" y2="161" stroke="#f2a65a" stroke-width="1.2"/>
         <!-- JTAG probe -->
-        <rect x="935" y="252" width="125" height="62" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
+        <rect class="box" id="bx-jtag" x="935" y="252" width="125" height="62" rx="10" fill="#232e3f" stroke="#3d4a5e" stroke-width="1.5"/>
         <text x="997" y="278" text-anchor="middle" font-size="13" font-weight="500" fill="#e8ecf4">JTAG probe</text>
         <text x="997" y="295" text-anchor="middle" font-size="11" fill="#8a94a5">flash &amp; debug</text>
         <!-- legend -->
@@ -452,10 +508,27 @@ footer .fine{color:#8a94a5}
         <text x="267" y="349" font-size="10.5" fill="#c7d2e3">VBatt power</text>
         <line x1="390" y1="345" x2="432" y2="345" stroke="#8a94a5" stroke-width="1.5" stroke-dasharray="4 4"/>
         <text x="442" y="349" font-size="10.5" fill="#c7d2e3">control · debug</text>
+        <!-- hotspots -->
+        <rect class="hit" x="40" y="60" width="170" height="96" data-target="bx-pc" data-t="CANoe PC" data-d="— CAPL-driven UDS panel cut per-session setup time 50% · adopted as team standard"/>
+        <rect class="hit" x="40" y="230" width="170" height="84" data-target="bx-psu" data-t="bench PSU" data-d="— programmable VBatt 9–16.5V · sweep &amp; brown-out recovery testing"/>
+        <rect class="hit" x="280" y="84" width="140" height="58" data-target="bx-iface" data-t="CAN interface" data-d="— every frame between test case and ECU crosses here · logged &amp; traced"/>
+        <rect class="hit" x="500" y="50" width="190" height="244" data-target="bx-rack" data-t="VT System rack" data-d="— real-time I/O + fault insertion · 5+ DTC defects exposed via fail-safe &amp; heal-path tests"/>
+        <path class="hit" d="M690,200 Q750,216 812,170" stroke="#fff" stroke-width="26" fill="none" data-target="bx-fault" data-t="fault injection" data-d="— VBatt sweeps &amp; line faults reproducing edge cases existing test plans missed"/>
+        <rect class="hit" x="745" y="84" width="150" height="84" data-target="bx-bo" data-t="breakout + load" data-d="— terminal taps for scope &amp; load boxes during signal-level debug"/>
+        <rect class="hit" x="935" y="70" width="125" height="110" data-target="bx-ecu" data-t="ECU (DUT)" data-d="— PAS · PSL · SDW on SPC5 · 20+ signal-level defects caught before vehicle integration"/>
+        <rect class="hit" x="935" y="252" width="125" height="62" data-target="bx-jtag" data-t="JTAG probe" data-d="— flash &amp; debug · low-level tracing when the bus can't tell the story"/>
       </g>
     </svg>
+    <div class="figtip" id="figtip"><span class="ft-hint">// hover a component — every box maps to a shipped result</span></div>
     <figcaption><b>fig.01</b> — HIL bench topology · ADAS validation (CANoe · VT System · fault injection · JTAG debug)</figcaption>
   </figure>
+
+  <aside class="case reveal">
+    <div class="case-tag">case file 01 · field escape → permanent coverage</div>
+    <h3>The defect that became a test plan</h3>
+    <p>A customer reported an intermittent ADAS fault that none of the existing suites could reproduce. Working with the development architect, I traced it to a <strong>cross-ECU timestamp synchronization gap</strong> — then authored a new test plan and a CANoe automation concept so the whole team regresses against it. One field escape, converted into permanent coverage.</p>
+    <div class="case-flow"><span>customer report</span>→<span>investigation w/ architect</span>→<span>timestamp-sync root cause</span>→<span>new test plan + CANoe automation</span></div>
+  </aside>
 
   <div class="xp reveal">
     <div class="side">
@@ -638,8 +711,22 @@ footer .fine{color:#8a94a5}
     <span class="resp">ECU&nbsp;&nbsp;&gt;</span> 62 F1 90 46 52 45 45 44 4F 4D<br>
     <span class="note">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- decoded: "FREEDOM" · positive response · no DTCs stored</span>
   </div>
-  <div class="fine">© 2026 Quoc Huy Lieu · budaica.com<br>hard work → freedom</div>
+  <div class="fine">© 2026 Quoc Huy Lieu · budaica.com · press <b>`</b> to navigate · psst… type "uds"<br>hard work → freedom</div>
 </footer>
+
+<div class="pal" id="pal" role="dialog" aria-label="quick navigation">
+  <div class="pal-box">
+    <div class="pal-head"><span>huy@budaica:~$</span> goto :<input id="palIn" type="text" autocomplete="off" spellcheck="false" placeholder="experience" aria-label="filter destinations"></div>
+    <ul class="pal-list" id="palList"></ul>
+    <div class="pal-foot">↑ ↓ select · enter jump · esc close</div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status">
+  <span class="req">tester&gt;</span> 22 F1 90 <span class="dim"># who_is_this_engineer?</span><br>
+  <span class="res">ECU&nbsp;&nbsp;&gt;</span> 62 F1 90 46 52 45 45 44 4F 4D<br>
+  <span class="ok">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✓ decoded: "FREEDOM"</span>
+</div>
 
 <script>
 /* ---- scroll reveal ---- */
@@ -666,6 +753,171 @@ var statIO=new IntersectionObserver(function(entries){
   });
 },{threshold:.5});
 document.querySelectorAll('.stat .num').forEach(function(el){statIO.observe(el);});
+
+/* ---- helpers ---- */
+function bel(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n;}
+var REDUCED=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---- bench terminal: typewriter boot + playground ---- */
+var benchTerm=document.getElementById('benchTerm'),benchTry=document.getElementById('benchTry');
+function bline(tester){
+  var d=bel('div','bl');
+  d.appendChild(bel('span',tester?'req':'res',tester?'tester>':'ECU  >'));
+  d.appendChild(document.createTextNode(' '));
+  return d;
+}
+function bfull(l){
+  if(l.dec){
+    var d=bel('div','bl');
+    d.appendChild(bel('span','dim','       -- decoded: '));
+    d.appendChild(bel('span','ok',l.dec));
+    return d;
+  }
+  var d=bline(l.t);
+  d.appendChild(bel('span',null,l.cmd));
+  if(l.cm){d.appendChild(document.createTextNode(' '));d.appendChild(bel('span','dim',l.cm));}
+  if(l.ok){d.appendChild(document.createTextNode(' '));d.appendChild(bel('span','ok',l.ok));}
+  return d;
+}
+var BOOT=[
+  {t:1,cmd:'10 03',cm:'# extended session'},
+  {cmd:'50 03',ok:'✓ session entered'},
+  {t:1,cmd:'19 0A',cm:'# readDTCInformation'},
+  {cmd:'59 0A FF C1 40 87',ok:'✓ DTC captured'},
+  {t:1,cmd:'fault_inject(VBatt 16.5V → 9V)'},
+  {cmd:'heal-path transition',ok:'✓ PASS'}
+];
+var SCN={
+  session:[{t:1,cmd:'10 03',cm:'# diagnosticSessionControl'},{cmd:'50 03',ok:'✓ session entered'}],
+  vin:[{t:1,cmd:'22 F1 90',cm:'# readDataByIdentifier: VIN'},{cmd:'62 F1 90 46 52 45 45 44 4F 4D'},{dec:'"FREEDOM" ✓'}],
+  fault:[{t:1,cmd:'fault_inject(VBatt 16.5V → 9V)',cm:'# brown-out sweep'},{cmd:'DTC set → heal-path transition',ok:'✓ PASS'}],
+  boot:BOOT
+};
+var bRun=0;
+function bplay(lines,withSum){
+  var run=++bRun;
+  benchTerm.innerHTML='';
+  benchTry.classList.remove('on');
+  function fin(){
+    if(run!==bRun)return;
+    if(withSum)benchTerm.appendChild(bel('span','sum','run 47/50 · 20+ defects caught before vehicle integration'));
+    benchTry.classList.add('on');
+  }
+  if(REDUCED){lines.forEach(function(l){benchTerm.appendChild(bfull(l));});fin();return;}
+  var i=0;
+  (function next(){
+    if(run!==bRun)return;
+    if(i>=lines.length){fin();return;}
+    var l=lines[i++];
+    if(l.t){
+      var d=bline(1),bc=bel('span'),caret=bel('span','caret');
+      d.appendChild(bc);d.appendChild(caret);benchTerm.appendChild(d);
+      var j=0;
+      var iv=setInterval(function(){
+        if(run!==bRun){clearInterval(iv);return;}
+        j++;bc.textContent=l.cmd.slice(0,j);
+        if(j>=l.cmd.length){
+          clearInterval(iv);caret.remove();
+          if(l.cm){d.appendChild(document.createTextNode(' '));d.appendChild(bel('span','dim',l.cm));}
+          setTimeout(next,430);
+        }
+      },26);
+    }else{
+      setTimeout(function(){
+        if(run!==bRun)return;
+        benchTerm.appendChild(bfull(l));
+        setTimeout(next,400);
+      },l.dec?320:540);
+    }
+  })();
+}
+benchTry.querySelectorAll('button').forEach(function(b){
+  b.addEventListener('click',function(){bplay(SCN[b.dataset.scn],b.dataset.scn==='boot');});
+});
+setTimeout(function(){bplay(BOOT,true);},600);
+
+/* ---- fig.01 interactive tour ---- */
+var figtip=document.getElementById('figtip'),figtipDef=figtip?figtip.innerHTML:'';
+document.querySelectorAll('.benchfig .hit').forEach(function(h){
+  var target=document.getElementById(h.getAttribute('data-target'));
+  if(!target)return;
+  function on(){
+    document.querySelectorAll('.benchfig .box.glow').forEach(function(b){b.classList.remove('glow');});
+    target.classList.add('glow');
+    figtip.classList.add('live');
+    figtip.innerHTML='<span><b>'+h.getAttribute('data-t')+'</b> '+h.getAttribute('data-d')+'</span>';
+  }
+  function off(){target.classList.remove('glow');figtip.classList.remove('live');figtip.innerHTML=figtipDef;}
+  h.addEventListener('mouseenter',on);
+  h.addEventListener('mouseleave',off);
+  h.addEventListener('click',function(){if(target.classList.contains('glow'))off();else on();});
+});
+
+/* ---- command palette ---- */
+var CMDS=[
+  {k:'experience',d:'Bosch · RA · TA',go:'#experience'},
+  {k:'publications',d:'IEEE ISQED 2026 · HOST 2026',go:'#publications'},
+  {k:'projects',d:'6 selected builds',go:'#work'},
+  {k:'skills',d:'tools & methods',go:'#toolbox'},
+  {k:'contact',d:'email · phone · links',go:'#contact'},
+  {k:'top',d:'back to the hero',go:'#hero'},
+  {k:'resume.pdf',d:'open the PDF',href:'Quoc_Huy_Lieu_Resume.pdf'},
+  {k:'garage',d:'personal notes & builds',href:'index.html'}
+];
+var pal=document.getElementById('pal'),palIn=document.getElementById('palIn'),palList=document.getElementById('palList'),palSel=0,palMatches=CMDS;
+function palHi(){Array.prototype.forEach.call(palList.children,function(li,i){li.classList.toggle('sel',i===palSel);});}
+function palRender(f){
+  palMatches=CMDS.filter(function(c){return c.k.toLowerCase().indexOf(f)>-1;});
+  palSel=0;palList.innerHTML='';
+  if(!palMatches.length){palList.innerHTML='<li><em>no match — try experience, projects, resume.pdf…</em></li>';return;}
+  palMatches.forEach(function(c,i){
+    var li=document.createElement('li');
+    li.appendChild(bel('span',null,':'+c.k));
+    li.appendChild(bel('em',null,c.d));
+    if(i===0)li.classList.add('sel');
+    li.addEventListener('click',function(){palRun(c);});
+    li.addEventListener('mouseenter',function(){palSel=i;palHi();});
+    palList.appendChild(li);
+  });
+}
+function palOpen(){pal.classList.add('on');palIn.value='';palRender('');palIn.focus();}
+function palClose(){pal.classList.remove('on');}
+function palRun(c){
+  palClose();
+  if(c.href){window.open(c.href,'_blank','noopener');}
+  else{var el=document.querySelector(c.go);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+}
+document.getElementById('navPal').addEventListener('click',palOpen);
+palIn.addEventListener('input',function(){palRender(palIn.value.trim().toLowerCase());});
+palIn.addEventListener('keydown',function(e){
+  if(e.key==='ArrowDown'){e.preventDefault();palSel=Math.min(palSel+1,palMatches.length-1);palHi();}
+  else if(e.key==='ArrowUp'){e.preventDefault();palSel=Math.max(palSel-1,0);palHi();}
+  else if(e.key==='Enter'){if(palMatches[palSel])palRun(palMatches[palSel]);}
+});
+pal.addEventListener('click',function(e){if(e.target===pal)palClose();});
+
+/* ---- global keys: palette toggle + uds handshake ---- */
+var udsBuf='',toastT=null;
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){palClose();return;}
+  var typing=/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
+  if((e.key==='`'&&!typing)||((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k')){
+    e.preventDefault();
+    if(pal.classList.contains('on'))palClose();else palOpen();
+    return;
+  }
+  if(typing||e.ctrlKey||e.metaKey||e.altKey)return;
+  if(/^[a-z]$/i.test(e.key)){
+    udsBuf=(udsBuf+e.key.toLowerCase()).slice(-3);
+    if(udsBuf==='uds'){
+      udsBuf='';
+      var t=document.getElementById('toast');
+      t.classList.add('on');
+      clearTimeout(toastT);
+      toastT=setTimeout(function(){t.classList.remove('on');},4500);
+    }
+  }
+});
 </script>
 </body>
 </html>
