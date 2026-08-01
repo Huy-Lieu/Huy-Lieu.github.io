@@ -2,16 +2,15 @@
 <!-- ============================================================
   HUY QUOC LIEU — RESUME PAGE  ·  "Dawn" (professional light theme)
   Served at: resume.budaica.com
-  Recruiter-first: clean hierarchy, fast scan, subtle road motif.
-  PLACEHOLDERS TO EDIT (search for "EDIT:"):
-  B.S. university, contact links, resume PDF link, stats numbers
+  Recruiter-first: profile → experience → publications → projects → skills.
+  Content synthesized from 15 tailored resumes (Aug 2026).
 ============================================================= -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quoc Huy Lieu — Embedded System Test Engineer · HIL / UDS / ADAS</title>
-<meta name="description" content="Embedded System Test Engineer — ADAS validation in HIL environments (Vector CANoe, VT System), UDS diagnostics (ISO 14229), and test automation. Hard work buys freedom.">
+<meta name="description" content="Embedded System Test Engineer — ADAS validation in HIL environments (Vector CANoe, VT System), UDS diagnostics (ISO 14229), and test automation. 20+ defects caught before vehicle integration, published at IEEE ISQED 2026.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://huy-lieu.github.io/resume.html">
@@ -50,40 +49,39 @@ nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   display:flex;justify-content:space-between;align-items:center;
   padding:1rem 5vw;
-  background:rgba(250,248,244,.85);
+  background:rgba(250,248,244,.88);
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
   border-bottom:1px solid var(--line);
 }
 .logo{font-family:var(--mono);font-size:.92rem;color:var(--ink);text-decoration:none;letter-spacing:.02em}
 .logo span{color:var(--amber)}
-.nav-links{display:flex;gap:1.9rem;list-style:none}
+.nav-links{display:flex;gap:1.7rem;list-style:none}
 .nav-links a{
   color:var(--ink-dim);text-decoration:none;
-  font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;
+  font-family:var(--mono);font-size:.76rem;letter-spacing:.05em;
   transition:color .25s;
 }
 .nav-links a::before{content:"/ ";color:var(--amber);opacity:.7}
 .nav-links a:hover{color:var(--amber-strong)}
 .nav-links a.exit{color:var(--amber)}
-@media(max-width:820px){.nav-links{display:none}}
-section{position:relative;padding:5.5rem 5vw;max-width:1080px;margin:0 auto}
+@media(max-width:900px){.nav-links{display:none}}
+section{position:relative;padding:4.5rem 5vw;max-width:1080px;margin:0 auto}
 .kicker{
   font-family:var(--mono);font-size:.74rem;letter-spacing:.28em;
   text-transform:uppercase;color:var(--amber);margin-bottom:.9rem;
 }
 .kicker::before{content:"// "}
-h2{font-size:clamp(1.7rem,3.6vw,2.3rem);font-weight:600;letter-spacing:-.02em;margin-bottom:2.4rem}
+h2{font-size:clamp(1.7rem,3.6vw,2.3rem);font-weight:600;letter-spacing:-.02em;margin-bottom:2.2rem}
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
 .reveal.visible{opacity:1;transform:none}
-.todo{border-bottom:1px dashed rgba(181,112,28,.6);cursor:help}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .reveal{opacity:1;transform:none;transition:none}
   *{animation:none!important}
 }
 /* ---------------- HERO ---------------- */
-#hero{max-width:1080px;padding-top:9.5rem;padding-bottom:4.5rem}
+#hero{max-width:1080px;padding-top:9rem;padding-bottom:3.5rem}
 .hero-tag{
   display:inline-block;
   font-family:var(--mono);font-size:.78rem;color:var(--ink-dim);
@@ -101,54 +99,74 @@ h2{font-size:clamp(1.7rem,3.6vw,2.3rem);font-weight:600;letter-spacing:-.02em;ma
 }
 .seeking b{color:var(--amber-strong);font-weight:500}
 .seeking .loc{font-size:.78rem}
-.statement{font-size:clamp(1.05rem,2.4vw,1.35rem);font-weight:300;line-height:1.55;max-width:40rem;color:var(--ink)}
+.statement{font-size:clamp(1.05rem,2.4vw,1.3rem);font-weight:300;line-height:1.55;max-width:40rem;color:var(--ink)}
 .statement .l1{display:block}
 .statement .l2{display:block;color:var(--amber-strong);font-weight:400}
-.hero-cta{display:flex;gap:.9rem;margin-top:2.6rem;flex-wrap:wrap}
+.hero-cta{display:flex;gap:.9rem;margin-top:2.4rem;flex-wrap:wrap}
 .btn{font-family:var(--mono);font-size:.84rem;text-decoration:none;padding:.82rem 1.55rem;border-radius:8px;transition:all .25s}
 .btn-solid{background:var(--ink);color:#fff;font-weight:500}
 .btn-solid:hover{background:var(--amber-strong);transform:translateY(-2px)}
 .btn-ghost{border:1px solid var(--line);color:var(--ink);background:var(--panel)}
 .btn-ghost:hover{border-color:var(--amber);color:var(--amber-strong)}
 /* ---------------- STATS ---------------- */
-#stats{padding-top:1rem}
+#stats{padding-top:1rem;padding-bottom:2.5rem}
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem}
 .stat{
   background:var(--panel);border:1px solid var(--line);border-radius:12px;
-  padding:1.35rem 1.1rem;text-align:center;
+  padding:1.3rem 1.1rem;text-align:center;
   box-shadow:0 1px 3px rgba(29,38,52,.05);
 }
-.stat .num{font-family:var(--mono);font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:700;color:var(--amber-strong);letter-spacing:-.02em}
+.stat .num{font-family:var(--mono);font-size:clamp(1.6rem,3.2vw,2.1rem);font-weight:700;color:var(--amber-strong);letter-spacing:-.02em}
 .stat .lbl{font-size:.76rem;color:var(--ink-dim);margin-top:.35rem}
-/* ---------------- JOURNEY (road rail) ---------------- */
-.road{position:relative;padding-left:3rem}
-.road::before{
-  content:"";position:absolute;left:10px;top:6px;bottom:6px;width:3px;
-  background:repeating-linear-gradient(180deg,var(--amber) 0 22px,transparent 22px 44px);
-  opacity:.55;border-radius:2px;
+/* ---------------- PROFILE ---------------- */
+#profile{max-width:900px}
+#profile p{font-size:clamp(1rem,2vw,1.15rem);font-weight:300;line-height:1.8;color:var(--ink)}
+#profile p strong{font-weight:600}
+#profile .kw{color:var(--amber-strong);font-weight:500}
+/* ---------------- EXPERIENCE (resume rows) ---------------- */
+.xp{
+  display:grid;grid-template-columns:170px 1fr;gap:2.2rem;
+  padding:2.2rem 0;border-top:1px solid var(--line);
 }
-.mile{
-  position:relative;margin-bottom:2rem;
+.xp:last-of-type{border-bottom:1px solid var(--line)}
+.xp .side .when{font-family:var(--mono);font-size:.74rem;color:var(--amber);letter-spacing:.1em;line-height:1.7;display:block}
+.xp .side .where{font-family:var(--mono);font-size:.72rem;color:var(--ink-dim);margin-top:.5rem;display:block;line-height:1.6}
+.xp .body h3{font-size:1.18rem;font-weight:600;letter-spacing:-.01em}
+.xp .body .org{font-family:var(--mono);font-size:.82rem;color:var(--ink-dim);margin:.25rem 0 1rem}
+.xp ul{list-style:none}
+.xp li{
+  font-size:.93rem;color:var(--ink-dim);
+  padding-left:1.15rem;position:relative;margin-bottom:.55rem;line-height:1.65;
+}
+.xp li::before{content:"▸";position:absolute;left:0;color:var(--amber);font-size:.7rem;top:.28rem}
+.xp li strong{color:var(--ink);font-weight:600}
+.xp li a{color:var(--amber-strong);text-decoration:none;border-bottom:1px dashed rgba(181,112,28,.45)}
+.xp li a:hover{color:var(--amber)}
+.xp.edu .body{border-left:3px dashed rgba(181,112,28,.4);padding-left:1.4rem}
+@media(max-width:760px){
+  .xp{grid-template-columns:1fr;gap:.7rem;padding:1.8rem 0}
+}
+/* ---------------- PUBLICATIONS ---------------- */
+.pubs{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.4rem}
+.pub{
   background:var(--panel);border:1px solid var(--line);border-radius:14px;
-  padding:1.6rem 1.7rem;
+  padding:1.7rem;display:flex;flex-direction:column;
   box-shadow:0 1px 3px rgba(29,38,52,.05);
+  transition:transform .3s,border-color .3s,box-shadow .3s;
 }
-.mile::before{
-  content:"";position:absolute;top:2rem;left:calc(-3rem + 11.5px);transform:translateX(-50%);
-  width:14px;height:14px;border-radius:50%;
-  background:var(--paper);border:3px solid var(--amber);
+.pub:hover{transform:translateY(-4px);border-color:rgba(181,112,28,.5);box-shadow:0 8px 22px rgba(29,38,52,.09)}
+.pub .venue{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;color:var(--green);
+  border:1px solid rgba(30,126,74,.4);background:rgba(30,126,74,.06);
+  padding:.28rem .65rem;border-radius:999px;width:fit-content;margin-bottom:1rem;
 }
-.mile .when{font-family:var(--mono);font-size:.73rem;color:var(--amber);letter-spacing:.12em}
-.mile h3{font-size:1.13rem;font-weight:600;margin:.4rem 0 .15rem}
-.mile .org{font-family:var(--mono);font-size:.8rem;color:var(--ink-dim);margin-bottom:.8rem}
-.mile ul{list-style:none}
-.mile li{font-size:.92rem;color:var(--ink-dim);padding-left:1.1rem;position:relative;margin-bottom:.35rem}
-.mile li::before{content:"▸";position:absolute;left:0;color:var(--amber);font-size:.7rem;top:.2rem}
-.mile a{color:var(--amber-strong);text-decoration:none;border-bottom:1px dashed rgba(181,112,28,.45)}
-.mile a:hover{color:var(--amber)}
-.mile.edu{border-style:dashed;background:#fffdf7}
+.pub h3{font-size:1.08rem;font-weight:600;line-height:1.4;margin-bottom:.55rem}
+.pub p{font-size:.9rem;color:var(--ink-dim);flex:1}
+.pub a.plink{font-family:var(--mono);font-size:.8rem;color:var(--ink);margin-top:1.1rem;text-decoration:none;width:fit-content}
+.pub a.plink:hover{color:var(--amber-strong)}
+.pub a.plink::after{content:" →"}
 /* ---------------- WORK ---------------- */
-.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.4rem}
+.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.4rem}
 .proj{
   background:var(--panel);border:1px solid var(--line);border-radius:14px;
   padding:1.7rem;display:flex;flex-direction:column;
@@ -157,11 +175,10 @@ h2{font-size:clamp(1.7rem,3.6vw,2.3rem);font-weight:600;letter-spacing:-.02em;ma
 }
 .proj:hover{transform:translateY(-5px);border-color:rgba(181,112,28,.5);box-shadow:0 8px 22px rgba(29,38,52,.09)}
 .proj .head{display:flex;justify-content:space-between;align-items:baseline;gap:.8rem;margin-bottom:.9rem}
-.proj h3{font-size:1.1rem;font-weight:600}
+.proj h3{font-size:1.08rem;font-weight:600}
 .status{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;padding:.26rem .6rem;border-radius:999px;white-space:nowrap}
 .status.pass{color:var(--green);border:1px solid rgba(30,126,74,.4);background:rgba(30,126,74,.06)}
-.status.wip{color:var(--amber-strong);border:1px solid rgba(181,112,28,.45);background:var(--amber-bg)}
-.proj p{font-size:.91rem;color:var(--ink-dim);flex:1}
+.proj p{font-size:.9rem;color:var(--ink-dim);flex:1}
 .tags{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.1rem}
 .tag{font-family:var(--mono);font-size:.68rem;color:var(--amber-strong);background:var(--amber-bg);padding:.24rem .58rem;border-radius:6px}
 .proj a.plink{font-family:var(--mono);font-size:.8rem;color:var(--ink);margin-top:1rem;text-decoration:none;width:fit-content}
@@ -178,28 +195,24 @@ h2{font-size:clamp(1.7rem,3.6vw,2.3rem);font-weight:600;letter-spacing:-.02em;ma
   color:var(--amber);margin-bottom:1.2rem;font-weight:500;
 }
 .sig{display:flex;align-items:center;gap:.8rem;margin-bottom:.7rem;font-size:.9rem}
-.sig .name{font-family:var(--mono);font-size:.8rem;min-width:9.2rem}
+.sig .name{font-family:var(--mono);font-size:.78rem;min-width:9.6rem}
 .sig .bar{flex:1;height:5px;background:#efe9dc;border-radius:3px;overflow:hidden}
 .sig .bar i{display:block;height:100%;background:linear-gradient(90deg,#d99a45,var(--amber));border-radius:3px;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 .visible .sig .bar i{width:var(--w)}
 .sig .lvl{font-family:var(--mono);font-size:.66rem;color:var(--ink-dim);min-width:4.4rem;text-align:right}
+.tgroup .note{font-size:.8rem;color:var(--ink-dim);margin-top:1rem;font-family:var(--mono);line-height:1.7}
 /* ---------------- WHY (dawn panel) ---------------- */
 #why{max-width:960px}
 .why-panel{
   background:linear-gradient(160deg,#fdf1da 0%,#fbe4bd 100%);
   border:1px solid rgba(181,112,28,.22);
-  border-radius:20px;padding:3.2rem clamp(1.6rem,5vw,3.4rem);
+  border-radius:20px;padding:3rem clamp(1.6rem,5vw,3.4rem);
   text-align:center;
 }
 #why .kicker{color:var(--amber-strong)}
 #why h2{margin-bottom:1.8rem}
-.manifesto{font-size:clamp(1.05rem,2.3vw,1.35rem);font-weight:300;line-height:1.75;color:#4a3420}
+.manifesto{font-size:clamp(1.05rem,2.3vw,1.3rem);font-weight:300;line-height:1.75;color:#4a3420}
 .manifesto strong{font-weight:600;color:#2b1c0c}
-.freedoms{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.4rem;margin-top:2.6rem;text-align:left}
-.fcard{background:rgba(255,253,248,.7);border:1px solid rgba(181,112,28,.25);border-radius:14px;padding:1.7rem;color:#3a2812}
-.fcard h3{font-size:1.02rem;font-weight:700;margin-bottom:.55rem}
-.fcard h3 span{font-family:var(--mono);font-size:.72rem;color:var(--amber-strong);display:block;letter-spacing:.15em;margin-bottom:.4rem}
-.fcard p{font-size:.91rem;color:#5d4526}
 /* ---------------- CONTACT ---------------- */
 #contact{text-align:center;max-width:820px}
 #contact p.lead{color:var(--ink-dim);max-width:34rem;margin:0 auto 2.2rem}
@@ -224,18 +237,16 @@ footer{padding:3.5rem 5vw 3rem;text-align:center;color:var(--ink-dim);font-famil
 footer .fine{color:#8a94a5}
 /* ---------------- PRINT ---------------- */
 @media print{
-  nav,.hero-cta,.scroll-hint{display:none}
+  nav,.hero-cta{display:none}
   body{background:#fff}
-  #hero{padding-top:2rem}
-  section{padding:1.4rem 0}
+  #hero{padding-top:1rem}
+  section{padding:1.2rem 0}
   .reveal{opacity:1;transform:none}
-  .mile,.proj,.tgroup,.stat,.clink{box-shadow:none;break-inside:avoid}
+  .mile,.proj,.tgroup,.stat,.pub,.clink{box-shadow:none;break-inside:avoid}
+  .xp{break-inside:avoid}
   .sig .bar i{width:var(--w)}
 }
 @media(max-width:640px){
-  .road{padding-left:2.2rem}
-  .road::before{left:7px}
-  .mile::before{left:calc(-2.2rem + 8.5px)}
   #hero{padding-top:7.5rem}
 }
 </style>
@@ -246,10 +257,10 @@ footer .fine{color:#8a94a5}
   <a class="logo" href="index.html">huy<span>@</span>budaica<span>:~$</span></a>
   <ul class="nav-links">
     <li><a href="index.html" class="exit">← garage</a></li>
-    <li><a href="#journey">journey</a></li>
-    <li><a href="#work">work</a></li>
-    <li><a href="#toolbox">toolbox</a></li>
-    <li><a href="#why">why</a></li>
+    <li><a href="#experience">experience</a></li>
+    <li><a href="#publications">publications</a></li>
+    <li><a href="#work">projects</a></li>
+    <li><a href="#toolbox">skills</a></li>
     <li><a href="#contact">contact</a></li>
   </ul>
 </nav>
@@ -266,7 +277,7 @@ footer .fine{color:#8a94a5}
     <span class="l2">Freedom means being there when my family needs me.</span>
   </p>
   <div class="hero-cta">
-    <a class="btn btn-solid" href="#journey">Start the journey ↓</a>
+    <a class="btn btn-solid" href="#experience">View experience ↓</a>
     <a class="btn btn-ghost" href="Quoc_Huy_Lieu_Resume.pdf" target="_blank" rel="noopener">resume.pdf</a>
   </div>
 </section>
@@ -277,54 +288,114 @@ footer .fine{color:#8a94a5}
     <div class="stat"><div class="num" data-count="20" data-suffix="+">0</div><div class="lbl">Defects caught pre-integration</div></div>
     <div class="stat"><div class="num" data-count="50" data-suffix="+">0</div><div class="lbl">UDS test cases designed</div></div>
     <div class="stat"><div class="num" data-count="60" data-suffix="%">0</div><div class="lbl">Diagnostic defects reduced</div></div>
+    <div class="stat"><div class="num" data-count="2556" data-suffix="">0</div><div class="lbl">FPGA configs characterized</div></div>
     <div class="stat"><div class="num" data-count="2" data-suffix="">0</div><div class="lbl">IEEE publications</div></div>
   </div>
 </section>
 
-<!-- ================= JOURNEY ================= -->
-<section id="journey">
-  <div class="kicker">Milestones</div>
-  <h2>The Journey</h2>
-  <div class="road">
-    <div class="mile reveal">
-      <div class="when">AUG 2025 — MAY 2026</div>
-      <h3>Research Assistant — Hardware Security Lab</h3>
-      <div class="org">California State University, Fullerton · Fullerton, CA</div>
-      <ul>
-        <li>Characterized an Anderson PUF across 2 FPGA platforms and 12 boards — identified a racing-path glitch failure mode in simulation and proved it exceeded available instrument bandwidth (<a href="https://ieeexplore.ieee.org/document/11534760" target="_blank" rel="noopener">published, IEEE ISQED 2026</a>)</li>
-        <li>Eliminated 90% of manual placement effort by automating Vivado placement, synthesis &amp; bitstream generation with TCL across 128 PUF instances</li>
-        <li>Cut data collection from 2 manual weeks to 1 automated week over 2,556 configurations with an end-to-end Python GUI pipeline (instrument control → acquisition → cleaning → metrics)</li>
-        <li>Designed a functionally diverse Hardware Trojan library in Verilog and diagnosed synthesis-induced Trojan erasure (<a href="https://host.conferences.computer.org/2026/hardware-demos/" target="_blank" rel="noopener">IEEE HOST 2026 Hardware Demo</a>)</li>
-      </ul>
+<!-- ================= PROFILE ================= -->
+<section id="profile" class="reveal">
+  <div class="kicker">Profile</div>
+  <p>
+    Test &amp; validation engineer with <strong>2 years at Bosch</strong> validating safety-relevant ADAS ECUs
+    (<span class="kw">PAS · PSL · SDW</span>) on HIL benches, plus peer-reviewed hardware-validation research across
+    <strong>12 FPGA boards</strong>. I design standards-based test procedures (<span class="kw">ISO 14229 / UDS</span>),
+    automate them in <span class="kw">CAPL &amp; Python</span>, and root-cause the defects existing test plans miss —
+    from <strong>fault-injection edge cases</strong> to a customer-reported cross-ECU timing gap.
+  </p>
+</section>
+
+<!-- ================= EXPERIENCE ================= -->
+<section id="experience">
+  <div class="kicker">Track record</div>
+  <h2>Experience</h2>
+
+  <div class="xp reveal">
+    <div class="side">
+      <span class="when">DEC 2021 —<br>AUG 2023</span>
+      <span class="where">Ho Chi Minh City,<br>Vietnam</span>
     </div>
-    <div class="mile reveal">
-      <div class="when">SPRING 2024 — FALL 2025</div>
-      <h3>Teaching Assistant — EGEC 303 Electronics</h3>
-      <div class="org">California State University, Fullerton · Fullerton, CA</div>
-      <ul>
-        <li>Tutored and graded 50+ undergraduates in electronics (MOSFETs, BJTs, op-amps, small-signal analysis) with emphasis on circuit debugging and schematic interpretation</li>
-      </ul>
-    </div>
-    <div class="mile reveal">
-      <div class="when">DEC 2021 — AUG 2023</div>
+    <div class="body">
       <h3>Embedded System Test Engineer</h3>
-      <div class="org">Bosch Global Software Technologies Vietnam · Ho Chi Minh City</div>
+      <div class="org">Bosch Global Software Technologies Vietnam</div>
       <ul>
-        <li>Exposed 20+ signal-level defects before vehicle integration — validated ADAS features (PAS, PSL, SDW) on SPC5 PowerPC MCUs in HIL environments using Vector CANoe &amp; VT System</li>
-        <li>Found 5+ DTC defects via fault-injection sequences targeting fail-safe &amp; heal-path transitions not covered by existing test plans</li>
-        <li>Cut per-session diagnostic setup time 50% with a CAPL-driven UDS panel in CANoe replacing manual message entry — adopted as the team standard workflow</li>
-        <li>Reduced diagnostic defects 60% within 6 months via an ISO 14229-compliant UDS template covering 50+ test cases, including previously absent negative &amp; boundary conditions</li>
-        <li>Mentored 3 interns and 2 newcomers to independently execute assigned test features within 2 weeks</li>
+        <li><strong>Identified 20+ signal-level defects before vehicle integration</strong> — validated ultrasonic ADAS features (PAS, PSL, SDW) on SPC5 PowerPC MCUs in HIL environments using Vector CANoe &amp; VT System</li>
+        <li><strong>Reduced diagnostic defects 60% within 6 months</strong> — designed an ISO 14229-compliant UDS test procedure covering 50+ cases, applying boundary value analysis to add previously absent negative &amp; boundary conditions</li>
+        <li><strong>Expanded PAS HMI coverage</strong> across positive, negative &amp; configuration-dependent object-distance scenarios — calculated expected sensor behavior from vehicle &amp; sensor geometry (equivalence partitioning), then automated major scenarios in CAPL/VTT</li>
+        <li><strong>Built a reusable, multi-project test-scenario architecture for PSL</strong> — mapped requirement combinations with decision tables and shipped CAPL/CANoe/VTT automation templates adopted across projects</li>
+        <li><strong>Exposed 5+ DTC defects</strong> — designed fault-injection sequences reproducing fail-safe &amp; heal-path state transitions missing from existing test plans</li>
+        <li><strong>Closed a test-coverage gap behind a customer-reported defect</strong> — investigated cross-ECU timestamp synchronization with the development architect, then authored a new test plan &amp; CANoe automation concept for preventive regression</li>
+        <li><strong>Restored a broken VTT code-generation tool</strong> — traced the failure to a vTESTstudio VTT-function limit, then re-architected the Python/Tkinter generator to emit CAPL-based logic instead</li>
+        <li><strong>Cut per-session diagnostic setup time 50%</strong> — built a CAPL-driven UDS panel replacing manual message entry (adopted as team standard); trained testers on Git workflows and mentored 3 interns + 2 newcomers to independence within 2 weeks</li>
       </ul>
     </div>
-    <div class="mile edu reveal">
-      <div class="when">EDUCATION</div>
+  </div>
+
+  <div class="xp reveal">
+    <div class="side">
+      <span class="when">AUG 2025 —<br>MAY 2026</span>
+      <span class="where">Fullerton, CA</span>
+    </div>
+    <div class="body">
+      <h3>Research Assistant — Hardware Security Lab</h3>
+      <div class="org">California State University, Fullerton</div>
+      <ul>
+        <li><strong>Brought up &amp; statistically characterized an Anderson PUF</strong> across 12 FPGA boards and 2 Xilinx platforms (uniformity, uniqueness, reliability) — peer-reviewed, <a href="https://ieeexplore.ieee.org/document/11534760" target="_blank" rel="noopener">published at IEEE ISQED 2026</a></li>
+        <li><strong>Identified a racing-path glitch failure mode</strong> in RTL simulation, attempted direct capture with logic analyzer &amp; oscilloscope, and proved it exceeded available instrument bandwidth — documented honestly as a placement-sensitivity risk rather than overstating an unconfirmed result</li>
+        <li><strong>Eliminated 90% of manual placement effort</strong> — automated Vivado placement, synthesis &amp; bitstream generation with TCL, mapping 128 PUF instances to precise SLICE locations via parsed CSV constraints</li>
+        <li><strong>Cut data collection from 2 manual weeks to 1 automated week</strong> — end-to-end Python GUI pipeline (RealTerm instrument control → acquisition → cleaning → majority-vote metrics) across 2,556 configurations</li>
+        <li><strong>Designed a functionally diverse Hardware Trojan library in Verilog</strong> (AES-128 core: Ring-Oscillator, combinational &amp; counter-based triggers, plus six TrustHub benchmarks) — diagnosed &amp; fixed synthesis-induced Trojan erasure; <a href="https://host.conferences.computer.org/2026/hardware-demos/" target="_blank" rel="noopener">IEEE HOST 2026 Hardware Demo (ID-243)</a></li>
+        <li><strong>Captured a 10,000-trace labeled power dataset</strong> on a ChipWhisperer CW305 under controlled conditions — enabling a collaborator's unsupervised detection model to reach 99% accuracy / 1.0 ROC-AUC</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="xp reveal">
+    <div class="side">
+      <span class="when">SPR 2024 —<br>FALL 2025</span>
+      <span class="where">Fullerton, CA</span>
+    </div>
+    <div class="body">
+      <h3>Teaching Assistant — EGEC 303 Electronics</h3>
+      <div class="org">California State University, Fullerton</div>
+      <ul>
+        <li>Tutored &amp; graded <strong>50+ undergraduates</strong> — MOSFET (NMOS/PMOS) &amp; BJT characterization, op-amp circuit design, small-signal analysis — with emphasis on circuit debugging and schematic interpretation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="xp edu reveal">
+    <div class="side">
+      <span class="when">EDUCATION</span>
+    </div>
+    <div class="body">
       <h3>M.S. Computer Engineering — GPA 3.87/4.0</h3>
       <div class="org">California State University, Fullerton · Fall 2023 — May 2026 · Tau Beta Pi Honor Society</div>
       <ul>
         <li>Thesis: Anderson PUF characterization across two FPGA platforms — peer-reviewed, <a href="https://ieeexplore.ieee.org/document/11534760" target="_blank" rel="noopener">IEEE ISQED 2026</a></li>
-        <li>B.S. Mechatronics Engineering — <span class="todo" title="EDIT: your B.S. university and years">[University, Vietnam — EDIT]</span></li>
       </ul>
+      <h3 style="margin-top:1.4rem">B.S. Mechatronics Engineering</h3>
+      <div class="org">Ho Chi Minh University of Technology · 2021</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PUBLICATIONS ================= -->
+<section id="publications">
+  <div class="kicker">Peer-reviewed</div>
+  <h2>Publications &amp; Research</h2>
+  <div class="pubs">
+    <div class="pub reveal">
+      <span class="venue">IEEE ISQED 2026</span>
+      <h3>Anderson PUF Characterization Across Two FPGA Platforms</h3>
+      <p>Statistical characterization of an Anderson PUF across 12 physical boards and two Xilinx platforms — uniformity, uniqueness, reliability — plus an honest account of a glitch failure mode beyond instrument bandwidth.</p>
+      <a class="plink" href="https://ieeexplore.ieee.org/document/11534760" target="_blank" rel="noopener">Read on IEEE Xplore</a>
+    </div>
+    <div class="pub reveal">
+      <span class="venue">IEEE HOST 2026 · HW DEMO ID-243</span>
+      <h3>Functionally Diverse Hardware Trojan Library on AES-128</h3>
+      <p>Ring-Oscillator, combinational &amp; counter-based Trojan architectures plus six adapted TrustHub benchmarks in Verilog — with a fix for synthesis-induced Trojan erasure and a 10,000-trace ChipWhisperer power dataset.</p>
+      <a class="plink" href="https://host.conferences.computer.org/2026/hardware-demos/" target="_blank" rel="noopener">Demo listing</a>
     </div>
   </div>
 </section>
@@ -332,11 +403,11 @@ footer .fine{color:#8a94a5}
 <!-- ================= WORK ================= -->
 <section id="work">
   <div class="kicker">Proof of work</div>
-  <h2>The Work</h2>
+  <h2>Selected Projects</h2>
   <div class="projects">
     <div class="proj reveal">
       <div class="head"><h3>UDS Diagnostic Test Framework</h3><span class="status pass">PASS</span></div>
-      <p>ISO 14229-compliant UDS/DTC test-planning template covering 50+ cases including negative &amp; boundary conditions, then automated in CAPL &amp; vTESTstudio. Reduced diagnostic defects 60% within 6 months and became the Bosch team standard.</p>
+      <p>ISO 14229-compliant UDS/DTC test-planning template covering 50+ cases including negative &amp; boundary conditions, automated in CAPL &amp; vTESTstudio. Reduced diagnostic defects 60% within 6 months — became the Bosch team standard.</p>
       <div class="tags"><span class="tag">UDS</span><span class="tag">ISO 14229</span><span class="tag">CAPL</span><span class="tag">CANoe</span><span class="tag">vTESTstudio</span></div>
       <a class="plink" href="posts.html">Read the notes</a>
     </div>
@@ -347,14 +418,24 @@ footer .fine{color:#8a94a5}
       <a class="plink" href="https://github.com/Huy-Lieu/puf-capture-gui" target="_blank" rel="noopener">View on GitHub</a>
     </div>
     <div class="proj reveal">
+      <div class="head"><h3>Voice AI Scheduling Agent</h3><span class="status pass">PASS</span></div>
+      <p>FastAPI backend orchestrating an AI phone-scheduling agent — Twilio for outbound telephony, OpenAI Realtime API for speech-to-speech conversation. Defined &amp; executed 16 test scenarios, documented in a structured bug report and architecture writeup.</p>
+      <div class="tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Twilio</span><span class="tag">Realtime API</span><span class="tag">Test Design</span></div>
+    </div>
+    <div class="proj reveal">
       <div class="head"><h3>RTOS Motor Speed Controller</h3><span class="status pass">PASS</span></div>
-      <p>Bare-metal cooperative/blocking RTOS kernel on ARM Cortex-M4 (TM4C123): round-robin &amp; priority scheduling, TCB context switching, timer input-capture RPM measurement, SPI-driven LCD — including diagnosing and fixing a real priority-inversion defect.</p>
+      <p>Bare-metal cooperative/priority RTOS kernel on ARM Cortex-M4 (TM4C123): timer input-capture RPM feedback, interrupt-driven motor control, SPI-driven LCD — register-level drivers, plus diagnosing and fixing a real priority-inversion defect.</p>
       <div class="tags"><span class="tag">C</span><span class="tag">ARM Cortex-M4</span><span class="tag">RTOS</span><span class="tag">SPI</span></div>
       <a class="plink" href="posts.html">Read the notes</a>
     </div>
     <div class="proj reveal">
+      <div class="head"><h3>Booth Multiplier IP Cores</h3><span class="status pass">PASS</span></div>
+      <p>Standard &amp; Modified Booth multiplier RTL in VHDL, verified with self-checking testbenches across all sign combinations in Vivado — analyzing power/performance/area trade-offs (Modified Booth halves iteration count at higher complexity).</p>
+      <div class="tags"><span class="tag">VHDL</span><span class="tag">RTL</span><span class="tag">Testbench</span><span class="tag">Vivado</span></div>
+    </div>
+    <div class="proj reveal">
       <div class="head"><h3>Custom IR Sensor PCB</h3><span class="status pass">PASS</span></div>
-      <p>Schematic &amp; PCB layout in Altium for a custom IR sensor array — component values calculated from datasheets, then fabricated, soldered, and integrated onto a line-following vehicle where no off-the-shelf module fit.</p>
+      <p>Schematic &amp; PCB layout in Altium for a custom IR sensor array — component values calculated from datasheets, then personally fabricated, soldered, and integrated onto a line-following vehicle.</p>
       <div class="tags"><span class="tag">Altium</span><span class="tag">PCB Design</span><span class="tag">Sensors</span><span class="tag">Fabrication</span></div>
       <a class="plink" href="posts.html">Read the notes</a>
     </div>
@@ -364,7 +445,7 @@ footer .fine{color:#8a94a5}
 <!-- ================= TOOLBOX ================= -->
 <section id="toolbox">
   <div class="kicker">Signal list</div>
-  <h2>The Toolbox</h2>
+  <h2>Skills &amp; Tools</h2>
   <div class="tool-groups reveal">
     <div class="tgroup">
       <h3>HIL &amp; Diagnostics</h3>
@@ -379,19 +460,20 @@ footer .fine{color:#8a94a5}
       <h3>Test Design &amp; Automation</h3>
       <div class="sig"><span class="name">CAPL · vTESTstudio</span><span class="bar"><i style="--w:90%"></i></span><span class="lvl">advanced</span></div>
       <div class="sig"><span class="name">Test planning</span><span class="bar"><i style="--w:90%"></i></span><span class="lvl">advanced</span></div>
-      <div class="sig"><span class="name">Decision tables / EP</span><span class="bar"><i style="--w:85%"></i></span><span class="lvl">advanced</span></div>
       <div class="sig"><span class="name">VBA / Excel tooling</span><span class="bar"><i style="--w:85%"></i></span><span class="lvl">advanced</span></div>
       <div class="sig"><span class="name">Python</span><span class="bar"><i style="--w:80%"></i></span><span class="lvl">working</span></div>
       <div class="sig"><span class="name">Git / JIRA</span><span class="bar"><i style="--w:75%"></i></span><span class="lvl">working</span></div>
+      <div class="note">black-box techniques: BVA · equivalence partitioning · decision tables · state transition</div>
     </div>
     <div class="tgroup">
       <h3>Hardware &amp; Embedded</h3>
-      <div class="sig"><span class="name">JTAG · scope · LA</span><span class="bar"><i style="--w:85%"></i></span><span class="lvl">advanced</span></div>
+      <div class="sig"><span class="name">JTAG · scope · LA · DMM</span><span class="bar"><i style="--w:85%"></i></span><span class="lvl">advanced</span></div>
       <div class="sig"><span class="name">SPI / I²C / UART</span><span class="bar"><i style="--w:85%"></i></span><span class="lvl">advanced</span></div>
       <div class="sig"><span class="name">Bare-metal C/C++</span><span class="bar"><i style="--w:80%"></i></span><span class="lvl">working</span></div>
       <div class="sig"><span class="name">PCB design (Altium)</span><span class="bar"><i style="--w:75%"></i></span><span class="lvl">working</span></div>
-      <div class="sig"><span class="name">Verilog · Vivado · TCL</span><span class="bar"><i style="--w:75%"></i></span><span class="lvl">working</span></div>
-      <div class="sig"><span class="name">RTOS</span><span class="bar"><i style="--w:70%"></i></span><span class="lvl">working</span></div>
+      <div class="sig"><span class="name">Verilog · VHDL · Vivado</span><span class="bar"><i style="--w:75%"></i></span><span class="lvl">working</span></div>
+      <div class="sig"><span class="name">ChipWhisperer</span><span class="bar"><i style="--w:70%"></i></span><span class="lvl">working</span></div>
+      <div class="note">also: RTOS · TCL · MATLAB · RealTerm</div>
     </div>
   </div>
 </section>
@@ -408,16 +490,6 @@ footer .fine{color:#8a94a5}
       and the freedom to drop everything and stand by my family
       <strong>whenever they need me</strong>.
     </p>
-    <div class="freedoms">
-      <div class="fcard">
-        <h3><span>FREEDOM_FROM</span>Earned, never given</h3>
-        <p>Every skill in the toolbox above was bought with late nights and hard problems. Competence is the only currency that can't be taken away.</p>
-      </div>
-      <div class="fcard">
-        <h3><span>FREEDOM_FOR</span>Showing up</h3>
-        <p>Work is a means, not the end. The end is being present — for the people who matter, exactly when it matters.</p>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -425,7 +497,7 @@ footer .fine{color:#8a94a5}
 <section id="contact">
   <div class="kicker">Next exit</div>
   <h2>The Road Continues</h2>
-  <p class="lead">ADAS validation, HIL environments, UDS diagnostics, test automation — if your team tests ECUs for a living, we should talk. Open to Bench / HIL testing roles.</p>
+  <p class="lead">ADAS validation, HIL environments, UDS diagnostics, test automation — if your team tests ECUs for a living, we should talk. Open to Bench / HIL testing roles, anywhere in the US.</p>
   <div class="contact-links">
     <a class="clink" href="mailto:huylieu2233@gmail.com">huylieu2233@gmail.com</a>
     <a class="clink" href="tel:+15593264296">559-326-4296</a>
