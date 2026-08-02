@@ -156,7 +156,7 @@ article td:first-child{color:var(--ink);font-weight:500}
     }
     renderer.image=function(href,title,text){
       var t=title?' title="'+title+'"':"";
-      return '<img src="'+fixUrl(href)+'" alt="'+(text||"")+'"'+t+">';
+      return '<img src="'+fixUrl(href)+'" alt="'+(text||"")+'"'+t+">";
     };
     renderer.link=function(href,title,text){
       var t=title?' title="'+title+'"':"";
