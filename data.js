@@ -83,8 +83,16 @@ const SITE_DATA = {
   ],
 
   /* ---------------- LONGER POSTS ---------------- */
-  /* When you write a full article (posts/your-file.html),     */
-  /* register it here so it appears on the posts page.         */
+  /* HOW TO WRITE A FULL POST (Markdown — no HTML):
+     1. Copy posts/_template.md to posts/your-slug.md
+        (lowercase, hyphens, e.g. posts/spi-vs-i2c-vs-uart.md)
+     2. Write your post in Markdown. Images go in posts/img/
+        and are referenced as  ![caption](img/photo.png)
+     3. Register it below with:
+          file: "post.html?p=your-slug"
+     4. Commit. Done — the reader page renders it automatically.
+     (Old hand-written .html posts like the full-duplex one
+      still work exactly as before.)                              */
   posts: [
     {
       date: "2026-07-30",

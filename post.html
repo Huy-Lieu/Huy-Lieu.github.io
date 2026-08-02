@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<!-- ============================================================
+   budaica.com — POST READER (Markdown shell)
+   Reads ?p=your-slug → fetches posts/your-slug.md → renders it.
+   You never edit this file. You only write .md files in posts/
+   and register them in data.js. See data.js header for the how-to.
+   ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post — budaica</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<style>
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#c96f3f,var(--amber));z-index:200}
+main{max-width:720px}
+.back{font-family:var(--mono);font-size:.78rem;text-decoration:none;color:var(--ink-dim);display:inline-block;margin-bottom:2rem}
+.back:hover{color:var(--amber-soft)}
+.post-head{margin-bottom:2.4rem}
+.post-head h1{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin:.6rem 0 .9rem}
+.post-meta{display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;font-family:var(--mono);font-size:.75rem;color:var(--ink-dim)}
+article{font-weight:300;font-size:1.03rem;line-height:1.85;color:var(--ink)}
+article p{margin-bottom:1.3rem}
+article h2{
+  font-family:var(--mono);font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--amber);margin:2.4rem 0 1rem;font-weight:500;
+}
+article h2::before{content:"## "}
+article h3{font-size:1.05rem;font-weight:600;color:var(--ink);margin:1.8rem 0 .7rem}
+article h3::before{content:"### ";font-family:var(--mono);font-size:.75rem;color:var(--ink-dim)}
+article strong{font-weight:600;color:var(--amber-soft)}
+article em{color:var(--ink)}
+article a{color:var(--amber-soft);text-decoration:none;border-bottom:1px dashed rgba(242,166,90,.45)}
+article a:hover{color:var(--amber)}
+article code{font-family:var(--mono);font-size:.88em;color:var(--amber-soft);background:rgba(242,166,90,.1);padding:.1em .4em;border-radius:5px}
+article pre{
+  background:#0b1120;border:1px solid var(--card-border);border-radius:12px;
+  padding:1.1rem 1.25rem;margin:1.6rem 0;overflow-x:auto;
+}
+article pre code{background:none;padding:0;color:#e8ecf4;font-size:.85rem;line-height:1.7}
+article blockquote{
+  border-left:3px solid var(--amber);background:var(--card);
+  padding:1.1rem 1.3rem;border-radius:0 10px 10px 0;margin:1.6rem 0;
+  font-size:.95rem;
+}
+article blockquote p{margin-bottom:.6rem}
+article blockquote p:last-child{margin-bottom:0}
+article ul,article ol{margin:0 0 1.3rem 1.4rem}
+article li{margin-bottom:.45rem}
+article figure{margin:1.8rem 0}
+article img{display:block;max-width:100%;border-radius:12px;border:1px solid var(--card-border)}
+article figcaption{
+  margin-top:.6rem;text-align:center;
+  font-family:var(--mono);font-size:.72rem;color:var(--ink-dim);letter-spacing:.04em;
+}
+article hr{border:none;margin:2.2rem 0;text-align:center}
+article hr::after{content:"· · ·";color:var(--amber);font-family:var(--mono);letter-spacing:.5em}
+article table{width:100%;border-collapse:collapse;margin:1.6rem 0;font-size:.9rem}
+article th{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);text-align:left;padding:.6rem .8rem;border-bottom:2px solid var(--card-border)}
+article td{padding:.6rem .8rem;border-bottom:1px solid var(--card-border);color:var(--ink-dim)}
+article td:first-child{color:var(--ink);font-weight:500}
+.endrule{margin:3rem 0 1.5rem;text-align:center;color:var(--amber);font-family:var(--mono);letter-spacing:.5em}
+.post-error{padding:2.5rem 0;color:var(--ink-dim);font-weight:300}
+.post-error code{font-family:var(--mono);font-size:.88em;color:var(--amber-soft);background:rgba(242,166,90,.1);padding:.1em .4em;border-radius:5px}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="lamp"></div>
+
+<nav>
+  <a class="logo" href="index.html">huy<span>@</span>budaica<span>:~$</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">home</a></li>
+    <li><a href="notes.html">notes</a></li>
+    <li><a href="posts.html" class="here">posts</a></li>
+    <li><a href="resume.html">resume</a></li>
+  </ul>
+</nav>
+
+<main>
+  <a class="back" href="posts.html">← all posts</a>
+
+  <div class="post-head" id="postHead" style="display:none">
+    <div class="kicker">Field notes · long form</div>
+    <h1 id="postTitle"></h1>
+    <div class="post-meta" id="postMeta"></div>
+  </div>
+
+  <article id="md">
+    <noscript><p class="post-error">This page renders posts with JavaScript — enable it to read, or grab the raw file from the repo.</p></noscript>
+  </article>
+
+  <div class="endrule" id="endRule" style="display:none">· · ·</div>
+  <a class="back" href="posts.html">← all posts</a>
+</main>
+
+<footer>
+  <div>© 2026 Huy Quoc Lieu · budaica.com · hard work → freedom</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+(function(){
+  var MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  /* -- which post? ------------------------------------------------ */
+  var slug=new URLSearchParams(location.search).get("p")||"";
+  var art=document.getElementById("md");
+
+  function fail(msg){
+    art.innerHTML='<div class="post-error"><p>'+msg+'</p>'+
+      '<p>Expecting a file at <code>posts/'+slug+'.md</code> — check the slug, or head <a href="posts.html">back to all posts</a>.</p></div>';
+  }
+  if(!/^[a-z0-9_][a-z0-9-_]*$/i.test(slug)){ fail("No post specified."); return; }
+
+  fetch("posts/"+slug+".md").then(function(res){
+    if(!res.ok){ fail("Post not found."); return null; }
+    return res.text();
+  }).then(function(md){
+    if(md===null)return;
+
+    /* -- pull the title out of the first H1 ----------------------- */
+    var title="Untitled";
+    md=md.replace(/^#\s+(.+)$/m,function(_,t){title=t.trim();return "";});
+    document.title=title+" — budaica";
+    document.getElementById("postTitle").textContent=title;
+
+    /* -- meta: date & tags from data.js registration, + read time - */
+    var meta=[];
+    if(typeof SITE_DATA!=="undefined"){
+      var reg=SITE_DATA.posts.find(function(p){return p.file==="post.html?p="+slug;});
+      if(reg){
+        var d=reg.date.split("-");
+        meta.push(parseInt(d[2],10)+" "+MONTHS[parseInt(d[1],10)-1]+" "+d[0]);
+        if(reg.tags&&reg.tags.length)meta.push(reg.tags.join(", "));
+      }
+    }
+    var words=md.split(/\s+/).filter(Boolean).length;
+    meta.push(Math.max(1,Math.round(words/200))+" min read");
+    document.getElementById("postMeta").innerHTML=meta.map(function(m){return "<span>"+m+"</span>";}).join("<span>·</span>");
+    document.getElementById("postHead").style.display="";
+
+    /* -- render markdown; fix relative asset paths (md lives in posts/) */
+    var renderer=new marked.Renderer();
+    function fixUrl(u){
+      if(!u||/^(https?:)?\/\//.test(u)||u.charAt(0)==="#"||u.indexOf("data:")===0)return u;
+      return "posts/"+u;
+    }
+    renderer.image=function(href,title,text){
+      var t=title?' title="'+title+'"':"";
+      return '<img src="'+fixUrl(href)+'" alt="'+(text||"")+'"'+t+">';
+    };
+    renderer.link=function(href,title,text){
+      var t=title?' title="'+title+'"':"";
+      var ext=/^https?:\/\//.test(href)?' target="_blank" rel="noopener"':"";
+      return '<a href="'+fixUrl(href)+'"'+t+ext+">"+text+"</a>";
+    };
+    marked.setOptions({gfm:true,breaks:false});
+    art.innerHTML=marked.parse(md,{renderer:renderer});
+
+    /* -- wrap images-with-alt in figure + caption ------------------ */
+    Array.prototype.forEach.call(art.querySelectorAll("img"),function(img){
+      if(!img.alt)return;
+      var fig=document.createElement("figure");
+      var host=img.parentNode;
+      if(host.tagName==="P"&&host.childNodes.length===1){
+        host.parentNode.insertBefore(fig,host);fig.appendChild(img);host.remove();
+      }else{
+        host.insertBefore(fig,img);fig.appendChild(img);
+      }
+      var cap=document.createElement("figcaption");cap.textContent=img.alt;fig.appendChild(cap);
+    });
+
+    /* -- syntax highlighting --------------------------------------- */
+    if(window.hljs){
+      art.querySelectorAll("pre code").forEach(function(el){
+        try{hljs.highlightElement(el);}catch(e){}
+      });
+    }
+    document.getElementById("endRule").style.display="";
+  }).catch(function(){fail("Could not load the post (network hiccup?).");});
+
+  /* -- reading progress bar ---------------------------------------- */
+  window.addEventListener("scroll",function(){
+    var h=document.documentElement;
+    var p=h.scrollTop/(h.scrollHeight-h.clientHeight)*100;
+    document.getElementById("progress").style.width=p+"%";
+  });
+})();
+</script>
+</body>
+</html>
