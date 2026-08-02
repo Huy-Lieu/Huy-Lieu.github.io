@@ -341,6 +341,20 @@ footer .fine{color:#8a94a5}
 .offbench{margin-top:2rem;font-family:var(--mono);font-size:.78rem;color:#8f5a12;letter-spacing:.04em}
 .offbench a{color:#8f5a12;text-decoration:none;border-bottom:1px dashed rgba(143,90,18,.5)}
 .offbench a:hover{color:#b5701c}
+/* ---- lifecycle loop ---- */
+#loop .loop-kw{margin-top:1.1rem}
+.loop{margin:2.2rem 0 1rem;position:relative}
+.loop::before{content:"";position:absolute;left:15px;top:10px;bottom:34px;width:2px;background:repeating-linear-gradient(180deg,var(--amber) 0 10px,transparent 10px 20px);opacity:.45;border-radius:2px}
+.phase{display:flex;gap:1.3rem;padding:.7rem 0;position:relative;break-inside:avoid}
+.ph-mark{flex:0 0 32px;width:32px;height:32px;border-radius:50%;background:var(--paper);border:1px solid #efdfc0;color:var(--amber-strong);font-family:var(--mono);font-size:.68rem;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.ph-card{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1rem 1.3rem;box-shadow:0 4px 18px rgba(29,38,52,.05)}
+.ph-card h3{margin:0 0 .4rem;font-size:.98rem}
+.ph-tag{font-family:var(--mono);font-size:.62rem;font-weight:400;letter-spacing:.12em;color:var(--amber-strong);margin-left:.5rem}
+.ph-card p{margin:0;color:var(--ink-dim);font-size:.9rem;line-height:1.62}
+.ph-card p strong{color:var(--ink)}
+.ph-card .tags{margin-top:.6rem}
+.loop-close{margin:1rem 0 0 47px;font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;color:var(--amber-strong)}
+@media(max-width:640px){.ph-card{padding:.85rem 1rem}.loop-close{margin-left:0}}
 /* ---------------- PRINT (designed resume) ---------------- */
 @media print{
   @page{margin:11mm 12mm}
@@ -363,6 +377,15 @@ footer .fine{color:#8a94a5}
   .stat-grid{grid-template-columns:repeat(6,1fr);gap:.3rem}
   .stat{border-radius:6px;padding:.35rem .2rem}
   .stat .num{font-size:11pt}
+  /* lifecycle loop */
+  #loop .loop{margin:.3rem 0}
+  #loop .loop::before{left:11px;bottom:26px}
+  #loop .phase{padding:.22rem 0;gap:.7rem}
+  #loop .ph-mark{flex-basis:22px;width:22px;height:22px;font-size:.56rem}
+  #loop .ph-card{padding:.4rem .65rem}
+  #loop .ph-card p{font-size:8.2pt}
+  #loop .ph-tag{font-size:6pt}
+  #loop .loop-close{margin:.2rem 0 0 30px;font-size:6.8pt}
   .stat .lbl{font-size:6.3pt;margin-top:.15rem}
   /* tldr */
   #tldr{padding:.35rem 0;max-width:none}
@@ -694,6 +717,67 @@ footer .fine{color:#8a94a5}
 
 <div class="cline" aria-hidden="true"><span>mi 03</span></div>
 
+<!-- ================= LIFECYCLE ================= -->
+<section id="loop">
+  <div class="kicker">SDLC · STLC · V-model</div>
+  <h2>The Full Loop</h2>
+  <p class="lead">Software life cycles aren't an interview answer here — this is how requirements actually flowed on the Bosch ADAS program: out of DOORS, through design &amp; automation, onto the HIL bench, into a defect, and back out as permanent regression coverage.</p>
+  <div class="tags loop-kw"><span class="tag">SDLC</span><span class="tag">STLC</span><span class="tag">V-model</span><span class="tag">requirement traceability</span><span class="tag">test planning</span><span class="tag">regression testing</span></div>
+  <div class="loop reveal">
+    <div class="phase">
+      <div class="ph-mark">01</div>
+      <div class="ph-card">
+        <h3>Requirement analysis<span class="ph-tag">// STLC · requirement</span></h3>
+        <p>A requirement lands in <strong>DOORS</strong> — e.g. PAS object-distance HMI behavior across positive, negative &amp; configuration-dependent scenarios — and is <strong>traced to the system spec</strong> before a single test is written.</p>
+        <div class="tags"><span class="tag">DOORS</span><span class="tag">requirement traceability</span></div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="ph-mark">02</div>
+      <div class="ph-card">
+        <h3>Test design<span class="ph-tag">// STLC · test design</span></h3>
+        <p>Expected sensor behavior <strong>calculated from vehicle &amp; sensor geometry</strong>, then mapped with black-box techniques: equivalence partitioning across distance scenarios, <strong>boundary value analysis</strong> adding the negative &amp; boundary cases the existing plan missed, decision tables for requirement combinations. Output: an <strong>ISO 14229 UDS procedure of 50+ cases</strong>.</p>
+        <div class="tags"><span class="tag">BVA</span><span class="tag">equivalence partitioning</span><span class="tag">decision tables</span><span class="tag">ISO 14229</span></div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="ph-mark">03</div>
+      <div class="ph-card">
+        <h3>Implementation &amp; automation<span class="ph-tag">// SDLC · implementation</span></h3>
+        <p>Cases become <strong>CAPL &amp; vTESTstudio automation</strong> — built as a <strong>reusable, multi-project scenario architecture</strong> for PSL, with CANoe / CAPL / VTT templates adopted across projects.</p>
+        <div class="tags"><span class="tag">CAPL</span><span class="tag">vTESTstudio</span><span class="tag">CANoe</span></div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="ph-mark">04</div>
+      <div class="ph-card">
+        <h3>Environment &amp; execution<span class="ph-tag">// STLC · execution</span></h3>
+        <p>On the <strong>HIL bench</strong>: Vector VT System driving <strong>SPC5 PowerPC ECUs</strong>, with fault-injection sequences sweeping VBatt <strong>16.5V → 9V</strong> to reproduce the fail-safe entry &amp; heal-path recovery missing from existing test plans.</p>
+        <div class="tags"><span class="tag">VT System</span><span class="tag">HIL</span><span class="tag">fault injection</span><span class="tag">SPC5</span></div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="ph-mark">05</div>
+      <div class="ph-card">
+        <h3>Defect &amp; root cause<span class="ph-tag">// STLC · defect cycle</span></h3>
+        <p><strong>20+ signal-level defects</strong> caught before vehicle integration — and when a customer-reported defect escaped, investigated <strong>cross-ECU timestamp synchronization</strong> with the development architect down to the actual root cause.</p>
+        <div class="tags"><span class="tag">root-cause analysis</span><span class="tag">cross-ECU timing</span></div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="ph-mark">06</div>
+      <div class="ph-card">
+        <h3>Regression &amp; closure<span class="ph-tag">// SDLC · maintenance</span></h3>
+        <p>The escape becomes <strong>permanent coverage</strong>: a new test plan + CANoe automation concept for preventive regression. Diagnostic defects down <strong>60% within 6 months</strong> — and the framework became the <strong>team standard</strong>.</p>
+        <div class="tags"><span class="tag">regression testing</span><span class="tag">test planning</span><span class="tag">team standard</span></div>
+      </div>
+    </div>
+    <div class="loop-close">↺ loop closed — the regression suite feeds the next requirement cycle · traced end-to-end in DOORS</div>
+  </div>
+</section>
+
+<div class="cline" aria-hidden="true"><span>mi 04</span></div>
+
 <!-- ================= PUBLICATIONS ================= -->
 <section id="publications">
   <div class="kicker">Peer-reviewed</div>
@@ -714,7 +798,7 @@ footer .fine{color:#8a94a5}
   </div>
 </section>
 
-<div class="cline" aria-hidden="true"><span>mi 04</span></div>
+<div class="cline" aria-hidden="true"><span>mi 05</span></div>
 
 <!-- ================= WORK ================= -->
 <section id="work">
@@ -764,7 +848,7 @@ footer .fine{color:#8a94a5}
   </div>
 </section>
 
-<div class="cline" aria-hidden="true"><span>mi 05</span></div>
+<div class="cline" aria-hidden="true"><span>mi 06</span></div>
 
 <!-- ================= TOOLBOX ================= -->
 <section id="toolbox">
@@ -802,7 +886,7 @@ footer .fine{color:#8a94a5}
   </div>
 </section>
 
-<div class="cline" aria-hidden="true"><span>mi 06</span></div>
+<div class="cline" aria-hidden="true"><span>mi 07</span></div>
 
 <!-- ================= WHY ================= -->
 <section id="why">
@@ -820,7 +904,7 @@ footer .fine{color:#8a94a5}
   </div>
 </section>
 
-<div class="cline" aria-hidden="true"><span>mi 07</span></div>
+<div class="cline" aria-hidden="true"><span>mi 08</span></div>
 
 <!-- ================= CONTACT ================= -->
 <section id="contact">
@@ -986,6 +1070,7 @@ document.querySelectorAll('.benchfig .hit').forEach(function(h){
 /* ---- command palette ---- */
 var CMDS=[
   {k:'experience',d:'Bosch · RA · TA',go:'#experience'},
+  {k:'lifecycle',d:'SDLC · STLC · the full loop',go:'#loop'},
   {k:'publications',d:'IEEE ISQED 2026 · HOST 2026',go:'#publications'},
   {k:'projects',d:'6 selected builds',go:'#work'},
   {k:'skills',d:'tools & methods',go:'#toolbox'},
