@@ -20,13 +20,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
   --mono:'JetBrains Mono',ui-monospace,monospace;
-  --sans:'Space Grotesk',system-ui,sans-serif;
-  --paper:#faf8f4;
+  --sans:'IBM Plex Sans',system-ui,sans-serif;
+  --paper:#f9f8f5;
   --panel:#ffffff;
   --ink:#1d2634;
   --ink-dim:#5d6878;
@@ -214,7 +214,7 @@ h2{font-size:clamp(1.7rem,3.6vw,2.3rem);font-weight:600;letter-spacing:-.02em;ma
   padding-left:1.15rem;position:relative;margin-bottom:.55rem;line-height:1.65;
 }
 .xp li::before{content:"▸";position:absolute;left:0;color:var(--amber);font-size:.7rem;top:.28rem}
-.xp li strong{color:var(--amber-strong);font-weight:600}
+.xp li strong{color:var(--ink);font-weight:600}
 .xp li a{color:var(--amber-strong);text-decoration:none;border-bottom:1px dashed rgba(181,112,28,.45)}
 .xp li a:hover{color:var(--amber)}
 .xp.edu .body{border-left:3px dashed rgba(181,112,28,.4);padding-left:1.4rem}
@@ -349,7 +349,7 @@ footer .fine{color:#8a94a5}
 .ph-mark{flex:0 0 32px;width:32px;height:32px;border-radius:50%;background:var(--paper);border:1px solid #efdfc0;color:var(--amber-strong);font-family:var(--mono);font-size:.68rem;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
 .ph-card{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1rem 1.3rem;box-shadow:0 4px 18px rgba(29,38,52,.05)}
 .ph-card h3{margin:0 0 .4rem;font-size:.98rem}
-.ph-tag{font-family:var(--mono);font-size:.62rem;font-weight:400;letter-spacing:.12em;color:var(--amber-strong);margin-left:.5rem}
+.ph-tag{font-family:var(--mono);font-size:.62rem;font-weight:400;letter-spacing:.12em;color:var(--ink-dim);margin-left:.5rem}
 .ph-card p{margin:0;color:var(--ink-dim);font-size:.9rem;line-height:1.62}
 .ph-card p strong{color:var(--ink)}
 .ph-card .tags{margin-top:.6rem}
@@ -662,6 +662,13 @@ footer .fine{color:#8a94a5}
     <h3>The defect that became a test plan</h3>
     <p>A customer reported an intermittent ADAS fault that none of the existing suites could reproduce. Working with the development architect, I traced it to a <strong>cross-ECU timestamp synchronization gap</strong> — then authored a new test plan and a CANoe automation concept so the whole team regresses against it. One field escape, converted into permanent coverage.</p>
     <div class="case-flow"><span>customer report</span>→<span>investigation w/ architect</span>→<span>timestamp-sync root cause</span>→<span>new test plan + CANoe automation</span></div>
+  </aside>
+
+  <aside class="case reveal">
+    <div class="case-tag">case file 02 · tool ceiling → re-architecture</div>
+    <h3>The generator that came back speaking CAPL</h3>
+    <p>A VTT code-generation tool broke — and the root cause turned out to be a ceiling, not a bug: a hard <strong>vTESTstudio VTT-function limit</strong>. Rather than patch around it, I re-architected the <strong>Python/Tkinter generator to emit CAPL-based logic</strong> instead — restoring the tool past the limit that broke it.</p>
+    <div class="case-flow"><span>tool failure</span>→<span>root cause: VTT-function limit</span>→<span>re-architect → CAPL output</span>→<span>restored, past the ceiling</span></div>
   </aside>
 
   <div class="xp reveal">
