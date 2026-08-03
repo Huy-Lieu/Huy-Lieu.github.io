@@ -95,6 +95,13 @@ const SITE_DATA = {
       still work exactly as before.)                              */
   posts: [
     {
+      date: "2026-08-03",
+      title: "Struct vs Union in Embedded C — A Practical Deep Dive",
+      file: "post.html?p=struct-vs-union-embedded-c",
+      summary: "Study notes from hands-on exercises: memory layout, padding, reinterpretation,",
+      tags: ["learning", "C"]
+    },
+    {
       date: "2026-08-02",
       title: "Pointers, Function Pointers, and Callbacks: The C Foundations Behind Embedded Drivers",
       file: "post.html?p=Pointers_Function_Pointers_Callbacks_Article",
