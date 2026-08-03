@@ -97,8 +97,8 @@ const SITE_DATA = {
     {
       date: "2026-08-02",
       title: "J1939 Isn't a Cable — It's a Dictionary for CAN",
-      file: "post.html?p=j1939-isn-t-a-cable-it-s-a-dictionary-for-can",
-      summary: "—",
+      file: "post.html?p=J1939",
+      summary: "The first time most people encounter J1939, it's through a connector — a 9-pin Deutsch fitting on a heavy-duty truck or piece of off-road equipment.",
       tags: ["CAN", "J1939", "learning", "career", "automotive"]
     },
     {
