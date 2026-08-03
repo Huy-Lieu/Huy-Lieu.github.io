@@ -102,10 +102,20 @@ main{max-width:760px}
 <script src="render.js"></script>
 <script>
   var listEl = document.getElementById("entries");
+  var filterEl = document.getElementById("filters");
+  function paintCount(SD){
+    document.getElementById("count").textContent =
+      SD.entries.length + " pages · started " + fmtDate(SD.startedDate) + " · day " + daysSince(SD.startedDate);
+  }
   renderAllEntries(listEl);
-  renderFilters(document.getElementById("filters"), listEl);
-  document.getElementById("count").textContent =
-    SITE_DATA.entries.length + " pages · started " + fmtDate(SITE_DATA.startedDate) + " · day " + daysSince(SITE_DATA.startedDate);
+  renderFilters(filterEl, listEl);
+  paintCount(SITE_DATA);
+  /* re-paint from a fresh API read — the script tag rides a ~10-min CDN cache */
+  fetchFreshSiteData().then(function(SD){
+    renderEntriesWith(SD, listEl);
+    renderFiltersWith(SD, filterEl, listEl);
+    paintCount(SD);
+  });
 </script>
 </body>
 </html>

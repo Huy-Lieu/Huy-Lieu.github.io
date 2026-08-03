@@ -140,6 +140,10 @@
   renderCurrent(document.getElementById("current"));
   renderRoadmap(document.getElementById("roadmap"));
   renderLatest(document.getElementById("latest"), 4);
+  /* re-paint the log teaser from a fresh API read (script tag = ~10-min CDN cache) */
+  fetchFreshSiteData().then(function(SD){
+    renderLatestWith(SD, document.getElementById("latest"), 4);
+  });
 </script>
 </body>
 </html>

@@ -77,15 +77,33 @@ function entryHTML(e){
     '<span class="entry-tags">'+tags+'</span></div>'+
     '<p class="entry-text">'+esc(e.text)+'</p></article>';
 }
-function renderLatest(el, count){
-  el.innerHTML = SITE_DATA.entries.slice(0, count).map(entryHTML).join("");
+function renderLatestWith(SD, el, count){
+  el.innerHTML = SD.entries.slice(0, count).map(entryHTML).join("");
 }
-function renderAllEntries(el){
-  el.innerHTML = SITE_DATA.entries.map(entryHTML).join("");
+function renderLatest(el, count){ renderLatestWith(SITE_DATA, el, count); }
+function renderEntriesWith(SD, el){
+  el.innerHTML = SD.entries.map(entryHTML).join("");
 }
+function renderAllEntries(el){ renderEntriesWith(SITE_DATA, el); }
+/* ---------- fresh site data (beats the ~10-min Pages CDN cache) ----------
+   Every write (publish/import/delete) lands on GitHub instantly, but Pages
+   serves data.js from a 10-minute CDN cache — so the script-tag SITE_DATA
+   is stale right after any Studio write, and pages built from it contradict
+   reality ("I imported it but it's not on the shelf"). Pages paint instantly
+   from the script tag, then re-paint from this fresh API read. */
+function fetchFreshSiteData(){
+  return fetch("https://api.github.com/repos/Huy-Lieu/Huy-Lieu.github.io/contents/data.js?ref=main")
+    .then(function(r){ if(!r.ok) throw new Error("api"); return r.json(); })
+    .then(function(f){
+      const text = decodeURIComponent(escape(atob(String(f.content).replace(/\n/g,""))));
+      return new Function(text+";return SITE_DATA;")();
+    })
+    .catch(function(){ return SITE_DATA; }); /* offline/rate-limited: keep script-tag snapshot */
+}
+
 /* ---------- posts list (posts page) ---------- */
-function renderPosts(el){
-  el.innerHTML = SITE_DATA.posts.map(function(p){
+function renderPostsWith(SD, el){
+  el.innerHTML = SD.posts.map(function(p){
     const tags = (p.tags||[]).map(tagChip).join(" ");
     return '<a class="postcard" href="'+esc(p.file)+'">'+
       '<div class="postcard-head"><span class="entry-date">'+fmtDate(p.date)+'</span>'+
@@ -94,43 +112,25 @@ function renderPosts(el){
       '<p>'+esc(p.summary)+'</p></a>';
   }).join("");
 }
+function renderPosts(el){ renderPostsWith(SITE_DATA, el); }
 
 /* ---------- auto-discover unregistered .md files (the "drawer") ----------
    Any .md dropped into posts/ manually becomes readable from the site,
-   even before it's registered. Underscore-prefixed files = drafts, hidden. */
-function discoverUnfiled(el){
+   even before it's registered. Underscore-prefixed files = drafts, hidden.
+   Registered slugs come from the caller's SD — pass a FRESH one (see
+   fetchFreshSiteData) or the drawer will contradict the shelf. */
+function discoverUnfiledWith(SD, el){
   function slugOf(name){ return name.replace(/\.md$/i,""); }
   function pretty(slug){
     return slug.replace(/[-_]+/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();});
   }
-  /* NB: the shelf renders from the (CDN-cached) data.js script tag, but the
-     drawer must compare against FRESH registration state — otherwise a just-
-     imported post keeps showing as unfiled until the cache flips. So the
-     drawer reads data.js through the API too, and falls back to SITE_DATA. */
-  function registeredSlugs(text){
-    const slugs=[];
-    String(text).replace(/file:\s*"post\.html\?p=([^"]+)"/g,function(_,s){ slugs.push(s.toLowerCase()); return _; });
-    return slugs;
-  }
-  function freshDataJs(){
-    return fetch("https://api.github.com/repos/Huy-Lieu/Huy-Lieu.github.io/contents/data.js?ref=main")
-      .then(function(r){ if(!r.ok) throw new Error("api"); return r.json(); })
-      .then(function(f){ return decodeURIComponent(escape(atob(String(f.content).replace(/\n/g,"")))); })
-      .then(registeredSlugs)
-      .catch(function(){
-        return SITE_DATA.posts.map(function(p){
-          const m = String(p.file).match(/p=([a-z0-9_\-]+)/i);
-          return m ? m[1].toLowerCase() : null;
-        });
-      });
-  }
-  Promise.all([
-    fetch("https://api.github.com/repos/Huy-Lieu/Huy-Lieu.github.io/contents/posts?ref=main")
-      .then(function(r){ if(!r.ok) throw new Error("api"); return r.json(); }),
-    freshDataJs()
-  ])
-    .then(function(rs){
-      const files = rs[0], registered = rs[1];
+  const registered = SD.posts.map(function(p){
+    const m = String(p.file).match(/p=([a-z0-9_\-]+)/i);
+    return m ? m[1].toLowerCase() : null;
+  });
+  fetch("https://api.github.com/repos/Huy-Lieu/Huy-Lieu.github.io/contents/posts?ref=main")
+    .then(function(r){ if(!r.ok) throw new Error("api"); return r.json(); })
+    .then(function(files){
       const unfiled = files.filter(function(f){
         if(!/\.md$/i.test(f.name)) return false;
         const slug = slugOf(f.name);
@@ -150,12 +150,13 @@ function discoverUnfiled(el){
     })
     .catch(function(){ /* API hiccup/rate limit: the curated shelf still shows */ });
 }
+function discoverUnfiled(el){ discoverUnfiledWith(SITE_DATA, el); }
 
 /* ---------- notebook filters: search + tags + moods (notes page) ---------- */
-function renderFilters(el, listEl){
+function renderFiltersWith(SD, el, listEl){
   const state = { tag:"*", mood:"*", q:"" };
   const tags = [], moods = [];
-  SITE_DATA.entries.forEach(e => {
+  SD.entries.forEach(e => {
     (e.tags||[]).forEach(t => { if (tags.indexOf(t)<0) tags.push(t); });
     if (e.mood && moods.indexOf(e.mood)<0) moods.push(e.mood);
   });
@@ -169,7 +170,7 @@ function renderFilters(el, listEl){
     '<div class="fcount"></div>';
   const countEl = el.querySelector(".fcount");
   function apply(){
-    const f = SITE_DATA.entries.filter(e => {
+    const f = SD.entries.filter(e => {
       if (state.tag!=="*" && (e.tags||[]).indexOf(state.tag)<0) return false;
       if (state.mood!=="*" && e.mood!==state.mood) return false;
       if (state.q && String(e.text).toLowerCase().indexOf(state.q)<0) return false;
@@ -177,8 +178,8 @@ function renderFilters(el, listEl){
     });
     listEl.innerHTML = f.length ? f.map(entryHTML).join("")
       : '<div class="count-line">no pages match — loosen the filters</div>';
-    countEl.textContent = (f.length===SITE_DATA.entries.length) ? ""
-      : "showing "+f.length+" of "+SITE_DATA.entries.length+" pages";
+    countEl.textContent = (f.length===SD.entries.length) ? ""
+      : "showing "+f.length+" of "+SD.entries.length+" pages";
   }
   el.querySelector(".fsearch").addEventListener("input", function(){
     state.q = this.value.trim().toLowerCase(); apply();
@@ -195,3 +196,4 @@ function renderFilters(el, listEl){
     b.classList.add("active"); state.mood = b.dataset.mood; apply();
   });
 }
+function renderFilters(el, listEl){ renderFiltersWith(SITE_DATA, el, listEl); }

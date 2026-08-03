@@ -19,7 +19,24 @@
 <link rel="stylesheet" href="js/atom-one-dark.css">
 <style>
 #progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#8f5a12,var(--amber));z-index:200}
-main{max-width:720px}
+main{max-width:1120px}
+.reader-wrap{display:flex;gap:3rem;align-items:flex-start}
+.post-body{flex:1;min-width:0;max-width:760px}
+/* ---- on-this-page rail (wide screens only) ---- */
+.toc{display:block;width:230px;flex-shrink:0;position:sticky;top:4.5rem;padding:.4rem 0;background:none;border:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.toc:empty{display:none}
+.toc-label{font-family:var(--mono);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:.8rem}
+.toc a{
+  display:block;font-family:var(--mono);font-size:.72rem;line-height:1.5;color:var(--ink-dim);
+  text-decoration:none;padding:.32rem 0 .32rem .9rem;border-left:2px solid var(--card-border);
+  transition:color .2s,border-color .2s;
+}
+.toc a:hover{color:var(--amber)}
+.toc a.on{color:var(--amber);border-left-color:var(--amber)}
+@media(max-width:1150px){
+  .toc{display:none}
+  .reader-wrap{justify-content:center}
+}
 .back{font-family:var(--mono);font-size:.78rem;text-decoration:none;color:var(--ink-dim);display:inline-block;margin-bottom:2rem}
 .back:hover{color:var(--amber-soft)}
 .post-head{margin-bottom:2.4rem}
@@ -86,20 +103,25 @@ article td:first-child{color:var(--ink);font-weight:500}
 </nav>
 
 <main>
-  <a class="back" href="posts.html">← all posts</a>
+  <div class="reader-wrap">
+    <aside class="toc" id="toc" aria-label="on this page"></aside>
+    <div class="post-body">
+      <a class="back" href="posts.html">← all posts</a>
 
-  <div class="post-head" id="postHead" style="display:none">
-    <div class="kicker">write-up</div>
-    <h1 id="postTitle"></h1>
-    <div class="post-meta" id="postMeta"></div>
+      <div class="post-head" id="postHead" style="display:none">
+        <div class="kicker">write-up</div>
+        <h1 id="postTitle"></h1>
+        <div class="post-meta" id="postMeta"></div>
+      </div>
+
+      <article id="md">
+        <noscript><p class="post-error">This page renders posts with JavaScript — enable it to read, or grab the raw file from the repo.</p></noscript>
+      </article>
+
+      <div class="endrule" id="endRule" style="display:none">· · ·</div>
+      <a class="back" href="posts.html">← all posts</a>
+    </div>
   </div>
-
-  <article id="md">
-    <noscript><p class="post-error">This page renders posts with JavaScript — enable it to read, or grab the raw file from the repo.</p></noscript>
-  </article>
-
-  <div class="endrule" id="endRule" style="display:none">· · ·</div>
-  <a class="back" href="posts.html">← all posts</a>
 </main>
 
 <footer>
@@ -180,6 +202,26 @@ article td:first-child{color:var(--ink);font-weight:500}
       }
       var cap=document.createElement("figcaption");cap.textContent=img.alt;fig.appendChild(cap);
     });
+
+    /* -- on-this-page rail + scroll spy ---------------------------- */
+    var heads=art.querySelectorAll("h2");
+    if(heads.length>1){
+      var toc=document.getElementById("toc");
+      var linksHtml='<div class="toc-label">on this page</div>';
+      Array.prototype.forEach.call(heads,function(h,i){
+        h.id="sec-"+i;
+        linksHtml+='<a href="#sec-'+i+'" data-sec="sec-'+i+'">'+h.textContent+'</a>';
+      });
+      toc.innerHTML=linksHtml;
+      var tocLinks=toc.querySelectorAll("a");
+      var spy=function(){
+        var y=window.scrollY+130,cur=null;
+        Array.prototype.forEach.call(heads,function(h){if(h.offsetTop<=y)cur=h.id;});
+        Array.prototype.forEach.call(tocLinks,function(l){l.classList.toggle("on",l.dataset.sec===cur);});
+      };
+      window.addEventListener("scroll",spy);
+      spy();
+    }
 
     /* -- syntax highlighting --------------------------------------- */
     if(window.hljs){

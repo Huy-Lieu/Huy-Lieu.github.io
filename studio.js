@@ -512,12 +512,15 @@ function registeredSlugs(SD){
     return m?m[1].toLowerCase():null;
   });
 }
-/* shelve a hand-dropped .md: title from its first # line, summary from its first paragraph */
-function importPost(f,slug){
+/* shelve a hand-dropped .md, step 1: read it, pre-derive tags, open the picker.
+   Title from its first # line, summary from its first paragraph — but TAGS are
+   yours to adjust before anything is written. */
+function beginImport(f,slug,row,btn){
   if(state.writing){status("one operation at a time — still writing…","err");return;}
-  state.writing=true;
+  state.writing=true; btn.disabled=true;
   status("reading posts/"+f.name+"…","busy");
   ghGet("posts/"+f.name).then(function(ff){
+    state.writing=false;
     var md=b64d(ff.content);
     var title=slug.replace(/[-_]+/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();});
     md.replace(/^#\s+(.+)$/m,function(_,t){title=t.trim();return "";});
@@ -529,20 +532,43 @@ function importPost(f,slug){
       para=l;break;
     }
     var summary=tidySummary(para);
-    var block="    {\n"+
-      "      date: "+jstr(today())+",\n"+
-      "      title: "+jstr(title)+",\n"+
-      "      file: "+jstr("post.html?p="+slug)+",\n"+
-      "      summary: "+jstr(summary)+",\n"+
-      "      tags: "+taglistJs(deriveTags(title+"\n"+md))+"\n"+
-      "    },";
-    status("shelving "+slug+"…","busy");
-    return writeDataJs(function(text){
-      if(text.indexOf("post.html?p="+slug)>-1)return null;
-      return insertBlock(text,"posts: [",block);
-    },"import post "+slug+" via studio");
-  }).then(function(){
-    status("✓ "+slug+" is on the shelf — posts.html updates in ~1 min","ok");
+    var picked=deriveTags(title+"\n"+md);
+    var panel=document.createElement("div");
+    panel.className="impbox";
+    panel.innerHTML='<div class="imp-title">shelve “'+esc(title)+'” — adjust tags, then confirm:'+
+      '</div><div class="imp-sum">'+esc(summary)+'</div>';
+    var chipBox=document.createElement("div");chipBox.className="chiprow";
+    panel.appendChild(chipBox);
+    function rerender(){buildChips(chipBox,TAGS,picked,rerender,false);}
+    rerender();
+    var btns=document.createElement("div");btns.className="actions imp-actions";
+    var ok=document.createElement("button");ok.className="btn";ok.textContent="shelve it ✓";
+    var no=document.createElement("button");no.className="btn ghost";no.textContent="cancel";
+    btns.appendChild(ok);btns.appendChild(no);
+    panel.appendChild(btns);
+    row.insertAdjacentElement("afterend",panel);
+    ok.addEventListener("click",function(){doImport(f,slug,title,summary,picked);});
+    no.addEventListener("click",function(){panel.remove();btn.disabled=false;status("import cancelled","ok");});
+    status("tags derived from the article — adjust, then shelve ✓","ok");
+  }).catch(function(e){state.writing=false;btn.disabled=false;status(e.message,"err");});
+}
+/* step 2: write the registration with the chosen tags */
+function doImport(f,slug,title,summary,tags){
+  if(state.writing){status("one operation at a time — still writing…","err");return;}
+  state.writing=true;
+  var block="    {\n"+
+    "      date: "+jstr(today())+",\n"+
+    "      title: "+jstr(title)+",\n"+
+    "      file: "+jstr("post.html?p="+slug)+",\n"+
+    "      summary: "+jstr(summary)+",\n"+
+    "      tags: "+taglistJs(tags)+"\n"+
+    "    },";
+  status("shelving "+slug+"…","busy");
+  writeDataJs(function(text){
+    if(text.indexOf("post.html?p="+slug)>-1)return null;
+    return insertBlock(text,"posts: [",block);
+  },"import post "+slug+" via studio").then(function(){
+    status("✓ "+slug+" is on the shelf — posts.html shows it on the next visit or refresh","ok");
     return delay(900).then(loadManage);
   }).catch(function(e){status(e.message,"err");})
   .then(function(){state.writing=false;});
@@ -608,7 +634,7 @@ function loadManage(){
         var slug=f.name.replace(/\.md$/i,"");
         var r=manageRow(slug,'<span style="opacity:.6">posts/'+esc(f.name)+' — readable, but not on the shelf</span>',"⇪ import");
         r.del.classList.add("imp");
-        r.del.addEventListener("click",function(){importPost(f,slug);});
+        r.del.addEventListener("click",function(){beginImport(f,slug,r.row,r.del);});
         uEl.appendChild(r.row);
       });
     }).catch(function(){uEl.innerHTML='<div class="hintline">scan failed (rate limit?) — try reloading</div>';});

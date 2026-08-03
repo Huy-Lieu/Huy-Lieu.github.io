@@ -67,8 +67,14 @@
 <script src="data.js"></script>
 <script src="render.js"></script>
 <script>
-  renderPosts(document.getElementById("postlist"));
-  discoverUnfiled(document.getElementById("unfiled"));
+  var pl = document.getElementById("postlist"), uf = document.getElementById("unfiled");
+  renderPosts(pl);
+  /* shelf + drawer re-paint from one fresh API read — the script tag rides
+     a ~10-min CDN cache, so right after an import it would lie to you */
+  fetchFreshSiteData().then(function(SD){
+    renderPostsWith(SD, pl);
+    discoverUnfiledWith(SD, uf);
+  });
 </script>
 </body>
 </html>
