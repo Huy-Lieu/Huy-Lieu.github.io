@@ -108,6 +108,12 @@ const SITE_DATA = {
   /* mood: any emoji. tags: pick from learning / life / career / website — or invent your own. */
   entries: [
     {
+      date: "2026-08-02",
+      mood: "💡",
+      tags: ["learning"],
+      text: "I have done learning & reviewing the SPI, UART, I2C, callback, pointer and function pointer (mostly theory). Also finsh the CAN, CAN FD and LIN too. Will maybe write a post for what I have learnt and improve my resume as well as apply for job"
+    },
+    {
       date: "2026-08-01",
       mood: "📄",
       tags: ["career", "website"],
