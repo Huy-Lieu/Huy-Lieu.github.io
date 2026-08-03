@@ -129,6 +129,12 @@ const SITE_DATA = {
   /* mood: any emoji. tags: pick from learning / life / career / website — or invent your own. */
   entries: [
     {
+      date: "2026-08-03",
+      mood: "💡",
+      tags: ["learning", "career", "C"],
+      text: "I have learnt the SDLC. Union and Struct. I feel confident again to look for job. \n\nThis time customize my resume better. Now I kinda knew what things I have to do. Need to speak the same language as the JD. (At least get me the phone call)"
+    },
+    {
       date: "2026-08-02",
       mood: "💡",
       tags: ["learning"],
