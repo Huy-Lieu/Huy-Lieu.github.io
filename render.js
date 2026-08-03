@@ -95,20 +95,47 @@ function renderPosts(el){
   }).join("");
 }
 
-/* tag filter (notes page) */
-function renderTagFilters(el, listEl){
-  const tags = new Set();
-  SITE_DATA.entries.forEach(e => (e.tags||[]).forEach(t => tags.add(t)));
-  let html = '<button class="fchip active" data-tag="*">all</button>';
-  tags.forEach(t => { html += '<button class="fchip" data-tag="'+esc(t)+'">'+esc(t)+'</button>'; });
-  el.innerHTML = html;
-  el.addEventListener("click", ev => {
+/* ---------- notebook filters: search + tags + moods (notes page) ---------- */
+function renderFilters(el, listEl){
+  const state = { tag:"*", mood:"*", q:"" };
+  const tags = [], moods = [];
+  SITE_DATA.entries.forEach(e => {
+    (e.tags||[]).forEach(t => { if (tags.indexOf(t)<0) tags.push(t); });
+    if (e.mood && moods.indexOf(e.mood)<0) moods.push(e.mood);
+  });
+  el.innerHTML =
+    '<input class="fsearch" type="text" placeholder="search the logbook…">'+
+    '<div class="frow" id="frowTag"><button class="fchip active" data-tag="*">all</button>'+
+    tags.map(t => '<button class="fchip" data-tag="'+esc(t)+'">'+esc(t)+'</button>').join("")+'</div>'+
+    (moods.length ?
+      '<div class="frow frow-mood" id="frowMood"><button class="fchip active" data-mood="*">all moods</button>'+
+      moods.map(m => '<button class="fchip" data-mood="'+esc(m)+'">'+m+'</button>').join("")+'</div>' : "")+
+    '<div class="fcount"></div>';
+  const countEl = el.querySelector(".fcount");
+  function apply(){
+    const f = SITE_DATA.entries.filter(e => {
+      if (state.tag!=="*" && (e.tags||[]).indexOf(state.tag)<0) return false;
+      if (state.mood!=="*" && e.mood!==state.mood) return false;
+      if (state.q && String(e.text).toLowerCase().indexOf(state.q)<0) return false;
+      return true;
+    });
+    listEl.innerHTML = f.length ? f.map(entryHTML).join("")
+      : '<div class="count-line">no pages match — loosen the filters</div>';
+    countEl.textContent = (f.length===SITE_DATA.entries.length) ? ""
+      : "showing "+f.length+" of "+SITE_DATA.entries.length+" pages";
+  }
+  el.querySelector(".fsearch").addEventListener("input", function(){
+    state.q = this.value.trim().toLowerCase(); apply();
+  });
+  el.querySelector("#frowTag").addEventListener("click", function(ev){
     const b = ev.target.closest(".fchip"); if (!b) return;
-    el.querySelectorAll(".fchip").forEach(x => x.classList.remove("active"));
-    b.classList.add("active");
-    const tag = b.dataset.tag;
-    const filtered = tag === "*" ? SITE_DATA.entries
-      : SITE_DATA.entries.filter(e => (e.tags||[]).includes(tag));
-    listEl.innerHTML = filtered.map(entryHTML).join("");
+    this.querySelectorAll(".fchip").forEach(x => x.classList.remove("active"));
+    b.classList.add("active"); state.tag = b.dataset.tag; apply();
+  });
+  const moodRow = el.querySelector("#frowMood");
+  if (moodRow) moodRow.addEventListener("click", function(ev){
+    const b = ev.target.closest(".fchip"); if (!b) return;
+    moodRow.querySelectorAll(".fchip").forEach(x => x.classList.remove("active"));
+    b.classList.add("active"); state.mood = b.dataset.mood; apply();
   });
 }

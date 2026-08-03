@@ -99,7 +99,9 @@ Array.prototype.forEach.call(document.querySelectorAll(".stab"),function(b){
     b.classList.add("on");
     $("tab-note").hidden=b.dataset.tab!=="note";
     $("tab-post").hidden=b.dataset.tab!=="post";
+    $("tab-manage").hidden=b.dataset.tab!=="manage";
     status("","");
+    if(b.dataset.tab==="manage"&&tok())loadManage();
   });
 });
 
@@ -344,6 +346,81 @@ $("pCopy").addEventListener("click",function(){
     status("copied — create posts/"+slug+".md on GitHub, paste, then paste the block into data.js","ok");
   });
 });
+
+/* ---------------- MANAGE (load + delete) ---------------- */
+function ghDelete(path,sha,message){
+  return fetch(API+path,{method:"DELETE",headers:authH(),
+    body:JSON.stringify({message:message,sha:sha,branch:BRANCH})}).then(function(r){
+    if(!r.ok)return r.json().then(function(j){throw new Error("GitHub DELETE "+path+" -> "+r.status+" "+(j.message||""));});
+  });
+}
+/* remove one { … }, object block (lines) around the first line containing anchor */
+function removeBlock(src,anchor){
+  var lines=src.split("\n");
+  var i=-1;
+  for(var k=0;k<lines.length;k++){if(lines[k].indexOf(anchor)>-1){i=k;break;}}
+  if(i<0)throw new Error("couldn't find that entry in data.js — reload and try again");
+  var top=i;
+  while(top>0&&lines[top].trim()!=="{")top--;
+  var bot=i;
+  while(bot<lines.length-1&&lines[bot].trim().charAt(0)!=="}")bot++;
+  lines.splice(top,bot-top+1);
+  return lines.join("\n");
+}
+function manageRow(meta,text,delLabel){
+  var row=document.createElement("div");row.className="mrow";
+  row.innerHTML='<span class="md">'+esc(meta)+'</span><span class="mt">'+text+'</span>';
+  var del=document.createElement("button");
+  del.className="mdel";del.textContent=delLabel;
+  row.appendChild(del);
+  return {row:row,del:del};
+}
+function loadManage(){
+  if(!tok()){status("add your token in setup first","err");return;}
+  status("loading your content from GitHub…","busy");
+  ghGet("data.js").then(function(f){
+    var SD=new Function(b64d(f.content)+";return SITE_DATA;")();
+    var nEl=$("mNotes"),pEl=$("mPosts");
+    nEl.innerHTML="";pEl.innerHTML="";
+    SD.entries.forEach(function(e){
+      var r=manageRow(e.date,(e.mood?e.mood+" ":"")+esc(e.text),"✕ delete");
+      r.del.addEventListener("click",function(){
+        if(!window.confirm("Delete the note from "+e.date+"?\n\n"+e.text.slice(0,140)+(e.text.length>140?"…":"")))return;
+        status("deleting note…","busy");
+        getDataJs().then(function(d){
+          return ghPut("data.js",b64e(removeBlock(d.text,"text: "+jstr(e.text))),d.sha,"delete note "+e.date+" via studio");
+        }).then(function(){
+          status("✓ note deleted — notes.html updates in ~1 min","ok");
+          loadManage();
+        }).catch(function(err){status(err.message,"err");});
+      });
+      nEl.appendChild(r.row);
+    });
+    SD.posts.forEach(function(p){
+      var m=String(p.file).match(/p=([a-z0-9_\-]+)/i);
+      var slug=m?m[1]:null;
+      var r=manageRow(p.date,esc(p.title)+(slug?' <span style="opacity:.5">· '+esc(slug)+'</span>':''),"✕ delete");
+      r.del.addEventListener("click",function(){
+        if(!slug){status("that post is a hand-written HTML page — delete it directly in the repo","err");return;}
+        if(!window.confirm("Delete post \""+p.title+"\"?\n\nThis removes the registration AND posts/"+slug+".md\n(images in posts/img/ stay in the library)."))return;
+        status("deleting post…","busy");
+        getDataJs().then(function(d){
+          return ghPut("data.js",b64e(removeBlock(d.text,jstr("post.html?p="+slug))),d.sha,"unregister post "+slug+" via studio");
+        }).then(function(){return ghGet("posts/"+slug+".md");})
+          .then(function(f2){return f2?ghDelete("posts/"+slug+".md",f2.sha,"delete post "+slug+" via studio"):null;})
+          .then(function(){
+            status("✓ post deleted — posts.html updates in ~1 min","ok");
+            loadManage();
+          }).catch(function(err){status(err.message,"err");});
+      });
+      pEl.appendChild(r.row);
+    });
+    if(!SD.entries.length)nEl.innerHTML='<div class="hintline">no notes yet</div>';
+    if(!SD.posts.length)pEl.innerHTML='<div class="hintline">no posts yet</div>';
+    status("loaded ✓ — "+SD.entries.length+" notes · "+SD.posts.length+" posts","ok");
+  }).catch(function(e){status(e.message,"err");});
+}
+$("mLoad").addEventListener("click",loadManage);
 
 /* ---------------- init ---------------- */
 $("nDate").value=today();

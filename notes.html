@@ -19,6 +19,15 @@
 /* ---------- logbook styling ---------- */
 main{max-width:760px}
 .filters{margin-bottom:1.8rem}
+.fsearch{
+  width:100%;background:rgba(255,255,255,.045);border:1px solid var(--card-border);
+  border-radius:999px;padding:.55rem 1.1rem;color:var(--ink);
+  font-family:var(--mono);font-size:.8rem;outline:none;margin-bottom:.9rem;transition:border-color .2s;
+}
+.fsearch:focus{border-color:rgba(242,166,90,.55)}
+.frow{margin-bottom:.4rem}
+.frow-mood .fchip{padding:.3rem .7rem}
+.fcount{font-family:var(--mono);font-size:.68rem;color:var(--ink-dim);letter-spacing:.08em;min-height:1rem;margin-top:.3rem}
 .count-line{font-family:var(--mono);font-size:.72rem;color:var(--ink-dim);margin-bottom:1.6rem;letter-spacing:.1em}
 
 /* each entry = a notebook page */
@@ -89,7 +98,7 @@ main{max-width:760px}
 <script>
   var listEl = document.getElementById("entries");
   renderAllEntries(listEl);
-  renderTagFilters(document.getElementById("filters"), listEl);
+  renderFilters(document.getElementById("filters"), listEl);
   document.getElementById("count").textContent =
     SITE_DATA.entries.length + " pages · started " + fmtDate(SITE_DATA.startedDate) + " · day " + daysSince(SITE_DATA.startedDate);
 </script>

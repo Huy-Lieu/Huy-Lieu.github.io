@@ -85,6 +85,15 @@ textarea{width:100%;resize:vertical;font-family:var(--mono);font-size:.86rem;lin
 
 /* ---- chips (mood/tags) ---- */
 .chiprow{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.5rem}
+
+/* ---- manage ---- */
+.msec{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-dim);margin:1.4rem 0 .6rem}
+.mrow{display:flex;align-items:center;gap:.7rem;border:1px solid var(--card-border);border-radius:10px;padding:.55rem .9rem;margin-bottom:.5rem;background:#fff}
+.mrow .md{font-family:var(--mono);font-size:.72rem;color:var(--amber);white-space:nowrap}
+.mrow .mm{font-size:.9rem}
+.mrow .mt{flex:1;font-size:.85rem;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:300}
+.mdel{font-family:var(--mono);font-size:.72rem;cursor:pointer;background:transparent;color:#c0452f;border:1px solid rgba(192,69,47,.4);border-radius:8px;padding:.28rem .7rem;transition:all .15s;white-space:nowrap}
+.mdel:hover{background:#c0452f;color:#fff}
 .fchip.active{color:#fff}
 
 /* ---- toolbar ---- */
@@ -185,6 +194,7 @@ textarea{width:100%;resize:vertical;font-family:var(--mono);font-size:.86rem;lin
   <div class="tabs">
     <button class="stab on" data-tab="note">field note</button>
     <button class="stab" data-tab="post">write-up / post</button>
+    <button class="stab" data-tab="manage">manage</button>
   </div>
 
   <!-- ============ NOTE ============ -->
@@ -281,6 +291,24 @@ textarea{width:100%;resize:vertical;font-family:var(--mono);font-size:.86rem;lin
       </div>
     </div>
     <input type="file" id="imgPicker" accept="image/*" multiple hidden>
+  </section>
+
+  <!-- ================= MANAGE (delete) ================= -->
+  <section id="tab-manage" hidden>
+    <div class="card">
+      <h2>Manage — your content</h2>
+      <div class="snote" style="margin-bottom:1rem">
+        Loaded fresh from GitHub (not the cached site). Deleting a post removes its registration
+        <b>and</b> its <b>posts/slug.md</b> file — images stay in the library for reuse.
+      </div>
+      <div class="actions" style="margin-bottom:.6rem">
+        <button class="btn ghost" id="mLoad">↻ load my content</button>
+      </div>
+      <h3 class="msec">notes</h3>
+      <div id="mNotes"><div class="hintline">hit “load my content” to see your notes</div></div>
+      <h3 class="msec">posts</h3>
+      <div id="mPosts"><div class="hintline">hit “load my content” to see your posts</div></div>
+    </div>
   </section>
 
   <div class="status" id="statusLine"></div>
