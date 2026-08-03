@@ -490,6 +490,47 @@ function manageRow(meta,text,delLabel){
   row.appendChild(del);
   return {row:row,del:del};
 }
+function registeredSlugs(SD){
+  return SD.posts.map(function(p){
+    var m=String(p.file).match(/p=([a-z0-9_\-]+)/i);
+    return m?m[1].toLowerCase():null;
+  });
+}
+/* shelve a hand-dropped .md: title from its first # line, summary from its first paragraph */
+function importPost(f,slug){
+  if(state.writing){status("one operation at a time — still writing…","err");return;}
+  state.writing=true;
+  status("reading posts/"+f.name+"…","busy");
+  ghGet("posts/"+f.name).then(function(ff){
+    var md=b64d(ff.content);
+    var title=slug.replace(/[-_]+/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();});
+    md.replace(/^#\s+(.+)$/m,function(_,t){title=t.trim();return "";});
+    var para="";
+    var lines=md.split("\n");
+    for(var i=0;i<lines.length;i++){
+      var l=lines[i].trim();
+      if(!l||l.charAt(0)==="#"||l.indexOf("```")===0)continue;
+      para=l;break;
+    }
+    var summary=para.replace(/[*_`>]/g,"").replace(/\[([^\]]*)\]\([^)]*\)/g,"$1").slice(0,140).trim()||"—";
+    var block="    {\n"+
+      "      date: "+jstr(today())+",\n"+
+      "      title: "+jstr(title)+",\n"+
+      "      file: "+jstr("post.html?p="+slug)+",\n"+
+      "      summary: "+jstr(summary)+",\n"+
+      "      tags: [\"learning\"]\n"+
+      "    },";
+    status("shelving "+slug+"…","busy");
+    return writeDataJs(function(text){
+      if(text.indexOf("post.html?p="+slug)>-1)return null;
+      return insertBlock(text,"posts: [",block);
+    },"import post "+slug+" via studio");
+  }).then(function(){
+    status("✓ "+slug+" is on the shelf — posts.html updates in ~1 min","ok");
+    return delay(900).then(loadManage);
+  }).catch(function(e){status(e.message,"err");})
+  .then(function(){state.writing=false;});
+}
 function loadManage(){
   if(!tok()){status("add your token in setup first","err");return;}
   status("loading your content from GitHub…","busy");
@@ -535,6 +576,26 @@ function loadManage(){
     });
     if(!SD.entries.length)nEl.innerHTML='<div class="hintline">no notes yet</div>';
     if(!SD.posts.length)pEl.innerHTML='<div class="hintline">no posts yet</div>';
+    /* loose .md files dropped into posts/ by hand */
+    var uEl=$("mUnfiled");
+    uEl.innerHTML='<div class="hintline">scanning posts/…</div>';
+    ghGet("posts").then(function(files){
+      var unfiled=(files||[]).filter(function(f){
+        if(!/\.md$/i.test(f.name))return false;
+        var slug=f.name.replace(/\.md$/i,"");
+        if(slug.charAt(0)==="_")return false; /* drafts/template stay hidden */
+        return registeredSlugs(SD).indexOf(slug.toLowerCase())<0;
+      });
+      if(!unfiled.length){uEl.innerHTML='<div class="hintline">no loose files — everything is shelved ✓</div>';return;}
+      uEl.innerHTML="";
+      unfiled.forEach(function(f){
+        var slug=f.name.replace(/\.md$/i,"");
+        var r=manageRow(slug,'<span style="opacity:.6">posts/'+esc(f.name)+' — readable, but not on the shelf</span>',"⇪ import");
+        r.del.classList.add("imp");
+        r.del.addEventListener("click",function(){importPost(f,slug);});
+        uEl.appendChild(r.row);
+      });
+    }).catch(function(){uEl.innerHTML='<div class="hintline">scan failed (rate limit?) — try reloading</div>';});
     status("loaded ✓ — "+SD.entries.length+" notes · "+SD.posts.length+" posts","ok");
   }).catch(function(e){status(e.message,"err");});
 }

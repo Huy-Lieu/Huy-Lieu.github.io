@@ -29,6 +29,9 @@
 .postcard-head{display:flex;align-items:center;gap:.7rem;margin-bottom:.5rem}
 .postcard h3{font-size:1.15rem;font-weight:600;margin-bottom:.4rem}
 .postcard p{font-family:var(--serif);font-size:.92rem;color:var(--ink-dim)}
+.unfiled-label{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim);margin:2.2rem 0 .9rem}
+.postcard.unfiled{border-style:dashed;background:transparent;box-shadow:none}
+.postcard.unfiled:hover{box-shadow:none;border-color:rgba(181,112,28,.5)}
 </style>
 </head>
 <body>
@@ -54,6 +57,7 @@
   </div>
   <div class="page-hint">long-form write-ups — the daily bench log lives in <a href="notes.html">notes</a></div>
   <div id="postlist"></div>
+  <div id="unfiled"></div>
 </main>
 
 <footer>
@@ -64,6 +68,7 @@
 <script src="render.js"></script>
 <script>
   renderPosts(document.getElementById("postlist"));
+  discoverUnfiled(document.getElementById("unfiled"));
 </script>
 </body>
 </html>

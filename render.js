@@ -95,6 +95,41 @@ function renderPosts(el){
   }).join("");
 }
 
+/* ---------- auto-discover unregistered .md files (the "drawer") ----------
+   Any .md dropped into posts/ manually becomes readable from the site,
+   even before it's registered. Underscore-prefixed files = drafts, hidden. */
+function discoverUnfiled(el){
+  function slugOf(name){ return name.replace(/\.md$/i,""); }
+  function pretty(slug){
+    return slug.replace(/[-_]+/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();});
+  }
+  fetch("https://api.github.com/repos/Huy-Lieu/Huy-Lieu.github.io/contents/posts?ref=main")
+    .then(function(r){ if(!r.ok) throw new Error("api"); return r.json(); })
+    .then(function(files){
+      const registered = SITE_DATA.posts.map(function(p){
+        const m = String(p.file).match(/p=([a-z0-9_\-]+)/i);
+        return m ? m[1].toLowerCase() : null;
+      });
+      const unfiled = files.filter(function(f){
+        if(!/\.md$/i.test(f.name)) return false;
+        const slug = slugOf(f.name);
+        if(slug.charAt(0)==="_") return false;
+        return registered.indexOf(slug.toLowerCase())<0;
+      });
+      if(!unfiled.length){ el.innerHTML=""; return; }
+      el.innerHTML =
+        '<div class="unfiled-label">in the drawer — readable now · shelve them properly via studio → manage → import</div>'+
+        unfiled.map(function(f){
+          const slug = slugOf(f.name);
+          return '<a class="postcard unfiled" href="post.html?p='+encodeURIComponent(slug)+'">'+
+            '<div class="postcard-head"><span class="entry-date">unfiled</span></div>'+
+            '<h3>'+esc(pretty(slug))+'</h3>'+
+            '<p>dropped straight into posts/'+esc(f.name)+' — no date or summary until it\'s registered</p></a>';
+        }).join("");
+    })
+    .catch(function(){ /* API hiccup/rate limit: the curated shelf still shows */ });
+}
+
 /* ---------- notebook filters: search + tags + moods (notes page) ---------- */
 function renderFilters(el, listEl){
   const state = { tag:"*", mood:"*", q:"" };
