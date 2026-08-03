@@ -12,7 +12,23 @@ var API="https://api.github.com/repos/"+REPO+"/contents/";
 var TOK_KEY="budaica_gh_token";
 
 var MOODS=["💡","🧠","📡","🔧","⚡","🎯","🚀","📄","🌧️","😤","☕","🏁"];
-var TAGS=["learning","life","career","website","SPI","UART","I2C","CAN","C","python","HIL","automotive"];
+var TAGS=["learning","life","career","website","SPI","UART","I2C","CAN","LIN","C","python","HIL","automotive"];
+/* vocabulary the importer scans for when tagging a hand-dropped post */
+var TAG_VOCAB=["SPI","UART","I2C","CAN","LIN","HIL","automotive","python"];
+function deriveTags(text){
+  var tags=["learning"];
+  TAG_VOCAB.forEach(function(t){
+    if(new RegExp("\\b"+t+"\\b","i").test(text)&&tags.indexOf(t)<0)tags.push(t);
+  });
+  return tags;
+}
+function tidySummary(para){
+  var s=para.replace(/[*_`>]/g,"").replace(/\[([^\]]*)\]\([^)]*\)/g,"$1").trim();
+  if(s.length<=170)return s||"—";
+  s=s.slice(0,170);
+  s=s.slice(0,s.lastIndexOf(" ")).replace(/[,;:\-—\s]+$/,"")+"…";
+  return s;
+}
 
 var state={mood:"💡",nTags:["learning"],pTags:["learning"],slugTouched:false,writing:false};
 
@@ -512,13 +528,13 @@ function importPost(f,slug){
       if(!l||l.charAt(0)==="#"||l.indexOf("```")===0)continue;
       para=l;break;
     }
-    var summary=para.replace(/[*_`>]/g,"").replace(/\[([^\]]*)\]\([^)]*\)/g,"$1").slice(0,140).trim()||"—";
+    var summary=tidySummary(para);
     var block="    {\n"+
       "      date: "+jstr(today())+",\n"+
       "      title: "+jstr(title)+",\n"+
       "      file: "+jstr("post.html?p="+slug)+",\n"+
       "      summary: "+jstr(summary)+",\n"+
-      "      tags: [\"learning\"]\n"+
+      "      tags: "+taglistJs(deriveTags(title+"\n"+md))+"\n"+
       "    },";
     status("shelving "+slug+"…","busy");
     return writeDataJs(function(text){

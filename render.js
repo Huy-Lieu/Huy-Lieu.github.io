@@ -103,13 +103,34 @@ function discoverUnfiled(el){
   function pretty(slug){
     return slug.replace(/[-_]+/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();});
   }
-  fetch("https://api.github.com/repos/Huy-Lieu/Huy-Lieu.github.io/contents/posts?ref=main")
-    .then(function(r){ if(!r.ok) throw new Error("api"); return r.json(); })
-    .then(function(files){
-      const registered = SITE_DATA.posts.map(function(p){
-        const m = String(p.file).match(/p=([a-z0-9_\-]+)/i);
-        return m ? m[1].toLowerCase() : null;
+  /* NB: the shelf renders from the (CDN-cached) data.js script tag, but the
+     drawer must compare against FRESH registration state — otherwise a just-
+     imported post keeps showing as unfiled until the cache flips. So the
+     drawer reads data.js through the API too, and falls back to SITE_DATA. */
+  function registeredSlugs(text){
+    const slugs=[];
+    String(text).replace(/file:\s*"post\.html\?p=([^"]+)"/g,function(_,s){ slugs.push(s.toLowerCase()); return _; });
+    return slugs;
+  }
+  function freshDataJs(){
+    return fetch("https://api.github.com/repos/Huy-Lieu/Huy-Lieu.github.io/contents/data.js?ref=main")
+      .then(function(r){ if(!r.ok) throw new Error("api"); return r.json(); })
+      .then(function(f){ return decodeURIComponent(escape(atob(String(f.content).replace(/\n/g,"")))); })
+      .then(registeredSlugs)
+      .catch(function(){
+        return SITE_DATA.posts.map(function(p){
+          const m = String(p.file).match(/p=([a-z0-9_\-]+)/i);
+          return m ? m[1].toLowerCase() : null;
+        });
       });
+  }
+  Promise.all([
+    fetch("https://api.github.com/repos/Huy-Lieu/Huy-Lieu.github.io/contents/posts?ref=main")
+      .then(function(r){ if(!r.ok) throw new Error("api"); return r.json(); }),
+    freshDataJs()
+  ])
+    .then(function(rs){
+      const files = rs[0], registered = rs[1];
       const unfiled = files.filter(function(f){
         if(!/\.md$/i.test(f.name)) return false;
         const slug = slugOf(f.name);

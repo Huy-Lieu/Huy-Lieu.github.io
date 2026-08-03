@@ -105,8 +105,8 @@ const SITE_DATA = {
       date: "2026-08-02",
       title: "LIN Bus Explained: Why Vehicles Don't Use CAN for Everything",
       file: "post.html?p=LIN_Bus_Article",
-      summary: "A modern vehicle can have anywhere from 70 to 150+ electronic control units. Every window switch, mirror motor, HVAC blend door, and seat po",
-      tags: ["learning"]
+      summary: "A modern vehicle can have anywhere from 70 to 150+ electronic control units. Every window switch, mirror motor, HVAC blend door, and seat position sensor needs some way to talk to the rest of the car.",
+      tags: ["learning", "CAN", "LIN"]
     },
     {
       date: "2026-07-30",
