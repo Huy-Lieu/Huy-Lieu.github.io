@@ -15,18 +15,20 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="library.css">
 <style>
 .postcard{
   display:block;text-decoration:none;color:inherit;
   background:var(--card);border:1px solid var(--card-border);border-radius:14px;
-  padding:1.5rem 1.7rem;margin-bottom:1.1rem;transition:transform .25s,border-color .25s;
+  box-shadow:0 1px 4px rgba(29,38,52,.06);
+  padding:1.5rem 1.7rem;margin-bottom:1.1rem;transition:transform .25s,border-color .25s,box-shadow .25s;
 }
-.postcard:hover{transform:translateY(-3px);border-color:rgba(242,166,90,.5)}
+.postcard:hover{transform:translateY(-3px);border-color:rgba(181,112,28,.5);box-shadow:0 10px 26px rgba(29,38,52,.1)}
 .postcard-head{display:flex;align-items:center;gap:.7rem;margin-bottom:.5rem}
 .postcard h3{font-size:1.15rem;font-weight:600;margin-bottom:.4rem}
-.postcard p{font-size:.9rem;color:var(--ink-dim);font-weight:300}
+.postcard p{font-family:var(--serif);font-size:.92rem;color:var(--ink-dim)}
 </style>
 </head>
 <body>

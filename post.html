@@ -13,18 +13,19 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="library.css">
 <link rel="stylesheet" href="js/atom-one-dark.css">
 <style>
-#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#c96f3f,var(--amber));z-index:200}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#8f5a12,var(--amber));z-index:200}
 main{max-width:720px}
 .back{font-family:var(--mono);font-size:.78rem;text-decoration:none;color:var(--ink-dim);display:inline-block;margin-bottom:2rem}
 .back:hover{color:var(--amber-soft)}
 .post-head{margin-bottom:2.4rem}
 .post-head h1{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin:.6rem 0 .9rem}
 .post-meta{display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;font-family:var(--mono);font-size:.75rem;color:var(--ink-dim)}
-article{font-weight:300;font-size:1.03rem;line-height:1.85;color:var(--ink)}
+article{font-weight:400;font-size:1.08rem;line-height:1.85;color:var(--ink)}
 article p{margin-bottom:1.3rem}
 article h2{
   font-family:var(--mono);font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;
@@ -35,11 +36,11 @@ article h3{font-size:1.05rem;font-weight:600;color:var(--ink);margin:1.8rem 0 .7
 article h3::before{content:"### ";font-family:var(--mono);font-size:.75rem;color:var(--ink-dim)}
 article strong{font-weight:600;color:var(--amber-soft)}
 article em{color:var(--ink)}
-article a{color:var(--amber-soft);text-decoration:none;border-bottom:1px dashed rgba(242,166,90,.45)}
+article a{color:var(--amber-soft);text-decoration:none;border-bottom:1px dashed rgba(181,112,28,.45)}
 article a:hover{color:var(--amber)}
-article code{font-family:var(--mono);font-size:.88em;color:var(--amber-soft);background:rgba(242,166,90,.1);padding:.1em .4em;border-radius:5px}
+article code{font-family:var(--mono);font-size:.88em;color:var(--amber-soft);background:rgba(181,112,28,.1);padding:.1em .4em;border-radius:5px}
 article pre{
-  background:#0b1120;border:1px solid var(--card-border);border-radius:12px;
+  background:#1d2634;border:1px solid #1d2634;border-radius:12px;
   padding:1.1rem 1.25rem;margin:1.6rem 0;overflow-x:auto;
 }
 article pre code{background:none;padding:0;color:#e8ecf4;font-size:.85rem;line-height:1.7}
@@ -66,7 +67,7 @@ article td{padding:.6rem .8rem;border-bottom:1px solid var(--card-border);color:
 article td:first-child{color:var(--ink);font-weight:500}
 .endrule{margin:3rem 0 1.5rem;text-align:center;color:var(--amber);font-family:var(--mono);letter-spacing:.5em}
 .post-error{padding:2.5rem 0;color:var(--ink-dim);font-weight:300}
-.post-error code{font-family:var(--mono);font-size:.88em;color:var(--amber-soft);background:rgba(242,166,90,.1);padding:.1em .4em;border-radius:5px}
+.post-error code{font-family:var(--mono);font-size:.88em;color:var(--amber-soft);background:rgba(181,112,28,.1);padding:.1em .4em;border-radius:5px}
 </style>
 </head>
 <body>

@@ -18,7 +18,7 @@
 <style>
 /* ---------- logbook styling ---------- */
 main{max-width:760px}
-.filters{margin-bottom:1.8rem}
+.filters{margin-bottom:1.8rem;border-bottom:1px dashed rgba(255,255,255,.12);padding-bottom:1.4rem}
 .fsearch{
   width:100%;background:rgba(255,255,255,.045);border:1px solid var(--card-border);
   border-radius:999px;padding:.55rem 1.1rem;color:var(--ink);
@@ -46,11 +46,16 @@ main{max-width:760px}
   padding:1.15rem 1.4rem 1.15rem 2rem;
   margin-bottom:1.3rem;
   line-height:1.72rem;
+  transition:transform .18s,box-shadow .18s;
+}
+.notebook .entry:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 22px rgba(0,0,0,.35),0 0 0 1px rgba(242,166,90,.14);
 }
 /* the notebook margin line */
 .notebook .entry::before{
   content:"";position:absolute;top:0;bottom:0;left:1.15rem;width:2px;
-  background:rgba(242,166,90,.35);
+  background:rgba(242,166,90,.45);
 }
 .notebook .entry-date{
   font-family:var(--mono);font-size:.78rem;font-weight:700;color:var(--amber);

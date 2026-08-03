@@ -1,0 +1,25 @@
+/* ============================================================
+   library.css — "The Library": warm-paper reading theme.
+   Linked AFTER shared.css on the long-form pages only
+   (posts.html, post.html, posts/*.html). It overrides the
+   midnight tokens, so home + notes keep the night garage.
+   Reading pages get paper, serif body, dark code islands.
+   ============================================================ */
+:root{
+  --amber:#b5701c;
+  --amber-soft:#8f5a12;
+  --ink:#22293a;
+  --ink-dim:#5d6878;
+  --card:#ffffff;
+  --card-border:rgba(29,38,52,.13);
+  --serif:'Lora',Georgia,'Times New Roman',serif;
+}
+body{background:linear-gradient(180deg,#faf8f3 0%,#f5f1e9 60%,#f1ece2 100%)}
+::selection{background:var(--amber);color:#fff}
+.lamp{background:radial-gradient(circle,rgba(181,112,28,.10) 0%,transparent 65%)}
+nav{background:rgba(250,248,243,.85);border-bottom:1px solid rgba(29,38,52,.09)}
+footer{color:#9b7350}
+.page-hint a{border-bottom-color:rgba(181,112,28,.45)}
+
+/* long-form body text reads in serif — the "published" feel */
+article{font-family:var(--serif)}
