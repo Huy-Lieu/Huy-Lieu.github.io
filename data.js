@@ -96,6 +96,13 @@ const SITE_DATA = {
   posts: [
     {
       date: "2026-08-03",
+      title: "Software Development Life Cycle (SDLC) — A Deep Dive for Automotive Embedded",
+      file: "post.html?p=software-development-life-cycle",
+      summary: "Study notes covering the SDLC from generic models to the automotive-specific",
+      tags: ["learning", "career"]
+    },
+    {
+      date: "2026-08-03",
       title: "Struct vs Union in Embedded C — A Practical Deep Dive",
       file: "post.html?p=struct-vs-union-embedded-c",
       summary: "Study notes from hands-on exercises: memory layout, padding, reinterpretation,",
