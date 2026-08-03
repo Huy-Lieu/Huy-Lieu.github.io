@@ -27,3 +27,4 @@ Tick a roadmap item: `done: false` → `done: true`.
 
 Static site — no build step, no backend. Hosted via GitHub Pages,
 custom domain: **budaica.com** (+ resume.budaica.com → resume page).
+
