@@ -24,9 +24,11 @@ That's not a limitation so much as a deliberate tradeoff. LIN uses a single wire
 
 This is the part of LIN that actually matters most, and it's the part most people gloss over.
 
-CAN is multi-master. Any node can attempt to transmit at any time, and arbitration sorts out who wins. LIN throws that model out entirely. A LIN network has exactly one master — usually the body control module — and every other node on the bus is a slave. Slaves never initiate communication. They only speak when the master asks them to, and not a moment before.
+CAN is multi-master. Any node can attempt to transmit at any time, and arbitration sorts out who wins. LIN throws that model out entirely. A LIN network has exactly one master — usually the body control module — and every other node on the bus is a slave. **Slaves never initiate communication. They only speak when the master asks them to, and not a moment before.**
 
 ![CAN Communication Protocol](img/CAN-Protocol.jpg)
+
+![LIN Communication Protocol](img/LIN-Protocol.png)
 
 The master doesn't just sit there waiting for something to happen. It works through a fixed, repeating **schedule table** — a predetermined sequence of message IDs that it polls, one after another, on a loop. If a window-lift module needs to report that a button was pressed, it can't just announce that. It has to wait for its slot in the schedule table to come around, get polled, and only then respond.
 
@@ -42,11 +44,13 @@ Slot 4 → Master polls HVAC Module      → HVAC Module responds
         ↳ loop back to Slot 1
 ```
 
-If you press the window-up button right after Slot 1 has already passed, the request doesn't go out immediately — it waits until the schedule loops back around to the Door Module's slot again. That's a real design tradeoff: LIN is time-triggered and deterministic, but that determinism comes at the cost of polling latency. For a window switch, a few milliseconds of delay is invisible. For something more time-sensitive, that same tradeoff would be unacceptable — which is exactly why LIN stays scoped to body-domain, non-critical functions.
+If you press the window-up button right after Slot 1 has already passed, the request doesn't go out immediately — it waits until the schedule loops back around to the Door Module's slot again. **That's a real design tradeoff: LIN is time-triggered and deterministic, but that determinism comes at the cost of polling latency**. For a window switch, a few milliseconds of delay is invisible. For something more time-sensitive, that same tradeoff would be unacceptable — which is exactly why **LIN stays scoped to body-domain, non-critical functions.**
 
 ## Frame Anatomy: Header and Response
 
 Every LIN transaction has two parts.
+
+![Standard LIN Frame](img/Standard-LIN-Frame.png)
 
 **The Header** — sent by the master, made up of three pieces:
 
