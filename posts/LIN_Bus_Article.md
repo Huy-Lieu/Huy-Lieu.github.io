@@ -26,7 +26,7 @@ This is the part of LIN that actually matters most, and it's the part most peopl
 
 CAN is multi-master. Any node can attempt to transmit at any time, and arbitration sorts out who wins. LIN throws that model out entirely. A LIN network has exactly one master — usually the body control module — and every other node on the bus is a slave. Slaves never initiate communication. They only speak when the master asks them to, and not a moment before.
 
-![CAN Communication Protocol](img/Image-Showing-Point-Point-Wiring-Connection-CAN-Protocol.png)
+![CAN Communication Protocol](img/CAN-Protocol.jpeg)
 
 The master doesn't just sit there waiting for something to happen. It works through a fixed, repeating **schedule table** — a predetermined sequence of message IDs that it polls, one after another, on a loop. If a window-lift module needs to report that a button was pressed, it can't just announce that. It has to wait for its slot in the schedule table to come around, get polled, and only then respond.
 
