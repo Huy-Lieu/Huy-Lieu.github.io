@@ -98,6 +98,11 @@ footer{padding:3rem 5vw 2.6rem;text-align:center;color:#8a6242;font-family:var(-
 .entry-text{font-size:.95rem;color:var(--ink);font-weight:300}
 .entry-text::first-letter{text-transform:capitalize}
 
+/* ---- page orientation hint (notes/posts) ---- */
+.page-hint{font-family:var(--mono);font-size:.72rem;color:var(--ink-dim);margin:-1.6rem 0 2.2rem;letter-spacing:.04em}
+.page-hint a{color:var(--amber-soft);text-decoration:none;border-bottom:1px dashed rgba(242,166,90,.45)}
+.page-hint a:hover{color:var(--amber)}
+
 /* ---- tag filter chips (notes page) ---- */
 .fchip{
   font-family:var(--mono);font-size:.75rem;color:var(--ink-dim);

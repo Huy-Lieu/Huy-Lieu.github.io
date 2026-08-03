@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<!-- ============================================================
+   budaica.com — THE STUDIO
+   Your writing UI: notes, posts, image uploads — publish straight
+   to the site via the GitHub API. No Markdown editing, no git.
+   Logic lives in studio.js. Token never leaves this browser.
+   ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio — budaica</title>
+<meta name="description" content="Huy's writing desk — publish notes and posts to the garage.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+main{max-width:1080px}
+.card h2{font-family:var(--mono);font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:1rem;font-weight:500}
+
+/* ---- setup card ---- */
+.setup{margin-bottom:2.4rem}
+.setup .snote{font-size:.9rem;color:var(--ink-dim);font-weight:300;margin-bottom:.9rem}
+.setup .snote b{color:var(--amber-soft);font-weight:500}
+.steps{margin:0 0 1.2rem 1.3rem;font-size:.86rem;color:var(--ink-dim);font-weight:300;line-height:1.8}
+.steps b{color:var(--ink);font-weight:500}
+.trow{display:flex;gap:.6rem;flex-wrap:wrap}
+.trow input{flex:1;min-width:220px}
+
+/* ---- inputs ---- */
+input[type=text],input[type=password],input[type=date],textarea{
+  background:#0b1120;border:1px solid var(--card-border);border-radius:10px;
+  padding:.65rem .9rem;color:var(--ink);font-family:var(--sans);font-size:.92rem;
+  outline:none;transition:border-color .2s;
+}
+input:focus,textarea:focus{border-color:rgba(242,166,90,.55)}
+textarea{width:100%;resize:vertical;font-family:var(--mono);font-size:.86rem;line-height:1.7}
+.fld{margin-bottom:1.1rem}
+.fld label{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:.45rem}
+
+/* ---- buttons ---- */
+.btn{
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;cursor:pointer;
+  background:var(--amber);color:#1a0f05;border:1px solid var(--amber);border-radius:10px;
+  padding:.6rem 1.2rem;transition:all .2s;font-weight:600;
+}
+.btn:hover{background:var(--amber-soft);border-color:var(--amber-soft)}
+.btn.ghost{background:transparent;color:var(--ink-dim);border-color:var(--card-border)}
+.btn.ghost:hover{color:var(--amber-soft);border-color:rgba(242,166,90,.5)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* ---- tabs ---- */
+.tabs{display:flex;gap:.6rem;margin-bottom:1.8rem}
+.stab{
+  font-family:var(--mono);font-size:.8rem;letter-spacing:.08em;cursor:pointer;
+  background:var(--card);border:1px solid var(--card-border);border-radius:999px;
+  color:var(--ink-dim);padding:.55rem 1.4rem;transition:all .2s;
+}
+.stab:hover{border-color:var(--amber)}
+.stab.on{color:#1a0f05;background:var(--amber);border-color:var(--amber);font-weight:600}
+
+/* ---- chips (mood/tags) ---- */
+.chiprow{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.5rem}
+
+/* ---- toolbar ---- */
+.toolbar{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.6rem}
+.tbtn{
+  font-family:var(--mono);font-size:.72rem;cursor:pointer;color:var(--ink-dim);
+  background:#0b1120;border:1px solid var(--card-border);border-radius:7px;padding:.3rem .6rem;transition:all .15s;
+}
+.tbtn:hover{color:var(--amber-soft);border-color:rgba(242,166,90,.5)}
+
+/* ---- post grid ---- */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;align-items:start}
+@media(max-width:900px){.pgrid{grid-template-columns:1fr}}
+
+/* ---- preview ---- */
+.pv{
+  background:var(--card);border:1px solid var(--card-border);border-radius:14px;
+  padding:1.4rem 1.6rem;min-height:200px;font-weight:300;font-size:.95rem;line-height:1.8;color:var(--ink);
+}
+.pv h2{font-family:var(--mono);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin:1.6rem 0 .7rem;font-weight:500}
+.pv h2::before{content:"## "}
+.pv h3{font-size:1rem;margin:1.2rem 0 .5rem}
+.pv p{margin-bottom:1rem}
+.pv strong{color:var(--amber-soft);font-weight:600}
+.pv code{font-family:var(--mono);font-size:.85em;color:var(--amber-soft);background:rgba(242,166,90,.1);padding:.1em .4em;border-radius:5px}
+.pv pre{background:#0b1120;border:1px solid var(--card-border);border-radius:10px;padding:.9rem 1rem;overflow-x:auto;margin:1rem 0}
+.pv pre code{background:none;padding:0;color:#e8ecf4;font-size:.8rem}
+.pv blockquote{border-left:3px solid var(--amber);background:rgba(255,255,255,.03);padding:.8rem 1rem;border-radius:0 8px 8px 0;margin:1rem 0;font-size:.9rem}
+.pv blockquote p{margin-bottom:.4rem}
+.pv blockquote p:last-child{margin-bottom:0}
+.pv ul,.pv ol{margin:0 0 1rem 1.3rem}
+.pv li{margin-bottom:.3rem}
+.pv img{max-width:100%;border-radius:10px;border:1px solid var(--card-border)}
+.pv table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.85rem}
+.pv th{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);text-align:left;padding:.45rem .6rem;border-bottom:2px solid var(--card-border)}
+.pv td{padding:.45rem .6rem;border-bottom:1px solid var(--card-border);color:var(--ink-dim)}
+.pv hr{border:none;margin:1.6rem 0;text-align:center}
+.pv hr::after{content:"· · ·";color:var(--amber);font-family:var(--mono);letter-spacing:.5em}
+.pv-label{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:.5rem}
+
+/* ---- note preview reuses entry card ---- */
+.nprev{margin-top:.4rem}
+
+/* ---- status ---- */
+.status{font-family:var(--mono);font-size:.78rem;min-height:1.4rem;margin-top:1rem;letter-spacing:.03em}
+.status.ok{color:#7ee2a8}
+.status.err{color:#e06a5a}
+.status.busy{color:var(--amber)}
+#tokStatus{min-height:1.2rem;margin-top:.7rem}
+.actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.4rem}
+.hintline{font-family:var(--mono);font-size:.68rem;color:var(--ink-dim);margin-top:.5rem}
+</style>
+</head>
+<body>
+<div class="lamp"></div>
+
+<nav>
+  <a class="logo" href="index.html">huy<span>@</span>budaica<span>:~$</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">home</a></li>
+    <li><a href="notes.html">notes</a></li>
+    <li><a href="posts.html">posts</a></li>
+    <li><a href="studio.html" class="here">studio</a></li>
+    <li><a href="resume.html">resume</a></li>
+  </ul>
+</nav>
+
+<main>
+  <div class="kicker">the studio</div>
+  <h1 class="page-title">Write &amp; Publish</h1>
+  <div class="wall">
+    No Markdown files, no git — <b>write here, publish straight to the site</b>.
+    Notes land in the logbook, posts become reader pages, images go to the library.
+  </div>
+
+  <!-- ============ SETUP ============ -->
+  <div class="card setup">
+    <h2>setup · github token</h2>
+    <p class="snote">The Studio publishes by talking to GitHub for you. It needs a token <b>once</b> — stored only in this browser, never sent anywhere except api.github.com.</p>
+    <ol class="steps">
+      <li>GitHub → <b>Settings</b> → <b>Developer settings</b> → <b>Fine-grained tokens</b> → Generate new token</li>
+      <li>Repository access → <b>Only select repositories</b> → <b>Huy-Lieu.github.io</b></li>
+      <li>Permissions → Repository → <b>Contents: Read and write</b> (the only permission needed)</li>
+      <li>Generate, copy, paste below — done forever. <b>Also revoke the old token</b> while you're there.</li>
+    </ol>
+    <div class="trow">
+      <input type="password" id="tokIn" placeholder="github_pat_…" autocomplete="off">
+      <button class="btn" id="tokSave">save</button>
+      <button class="btn ghost" id="tokTest">test</button>
+      <button class="btn ghost" id="tokClear">clear</button>
+    </div>
+    <div class="status" id="tokStatus"></div>
+  </div>
+
+  <!-- ============ TABS ============ -->
+  <div class="tabs">
+    <button class="stab on" data-tab="note">field note</button>
+    <button class="stab" data-tab="post">write-up / post</button>
+  </div>
+
+  <!-- ============ NOTE ============ -->
+  <section id="tab-note">
+    <div class="pgrid">
+      <div>
+        <div class="fld">
+          <label>date</label>
+          <input type="date" id="nDate">
+        </div>
+        <div class="fld">
+          <label>mood</label>
+          <div class="chiprow" id="moodRow"></div>
+        </div>
+        <div class="fld">
+          <label>tags</label>
+          <div class="chiprow" id="nTagRow"></div>
+          <div class="trow">
+            <input type="text" id="nTagCustom" placeholder="custom tag…">
+            <button class="btn ghost" id="nTagAdd">+ add</button>
+          </div>
+        </div>
+        <div class="fld">
+          <label>what happened / what clicked</label>
+          <textarea id="nText" rows="5" placeholder="One paragraph max — this is the logbook, not the report…"></textarea>
+        </div>
+        <div class="actions">
+          <button class="btn" id="nPublish">publish note</button>
+          <button class="btn ghost" id="nCopy">copy block (manual)</button>
+        </div>
+      </div>
+      <div>
+        <div class="pv-label">preview — how it lands in the logbook</div>
+        <div class="pv nprev" id="nPreview"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ POST ============ -->
+  <section id="tab-post" hidden>
+    <div class="pgrid">
+      <div>
+        <div class="fld">
+          <label>title</label>
+          <input type="text" id="pTitle" placeholder="UART vs I2C vs SPI — which wire does what" style="width:100%">
+        </div>
+        <div class="fld">
+          <label>slug (filename — auto, editable)</label>
+          <div class="trow">
+            <input type="text" id="pSlug" placeholder="uart-i2c-spi">
+            <button class="btn ghost" id="pSlugRegen">↺</button>
+          </div>
+          <div class="hintline">reader URL → post.html?p=<span id="pSlugEcho">…</span> · start with _ to keep it a hidden draft</div>
+        </div>
+        <div class="fld">
+          <label>summary (one line, for the posts card)</label>
+          <input type="text" id="pSummary" placeholder="Who keeps time, who chooses the talker…" style="width:100%">
+        </div>
+        <div class="fld">
+          <label>tags</label>
+          <div class="chiprow" id="pTagRow"></div>
+          <div class="trow">
+            <input type="text" id="pTagCustom" placeholder="custom tag…">
+            <button class="btn ghost" id="pTagAdd">+ add</button>
+          </div>
+        </div>
+        <div class="fld">
+          <label>body — click toolbar buttons, don't write syntax</label>
+          <div class="toolbar" id="toolbar">
+            <button class="tbtn" data-a="h2">H2</button>
+            <button class="tbtn" data-a="h3">H3</button>
+            <button class="tbtn" data-a="b"><b>B</b></button>
+            <button class="tbtn" data-a="i"><i>I</i></button>
+            <button class="tbtn" data-a="code">code</button>
+            <button class="tbtn" data-a="codeblock">{ }</button>
+            <button class="tbtn" data-a="callout">callout</button>
+            <button class="tbtn" data-a="table">table</button>
+            <button class="tbtn" data-a="ul">• list</button>
+            <button class="tbtn" data-a="ol">1. list</button>
+            <button class="tbtn" data-a="link">link</button>
+            <button class="tbtn" data-a="hr">· · ·</button>
+            <button class="tbtn" data-a="img">+ image</button>
+          </div>
+          <textarea id="pBody" rows="16" placeholder="Write like you talk. Select words and hit B to bold them, hit + image to upload a picture where the cursor is…"></textarea>
+        </div>
+        <div class="actions">
+          <button class="btn" id="pPublish">publish post</button>
+          <button class="btn ghost" id="pCopy">copy .md (manual)</button>
+        </div>
+      </div>
+      <div>
+        <div class="pv-label">preview — how it renders for readers</div>
+        <div class="pv" id="pPreview"></div>
+      </div>
+    </div>
+    <input type="file" id="imgPicker" accept="image/*" multiple hidden>
+  </section>
+
+  <div class="status" id="statusLine"></div>
+</main>
+
+<footer>
+  <div>© 2026 Huy Quoc Lieu · budaica.com · hard work → freedom</div>
+</footer>
+
+<script src="js/marked.min.js"></script>
+<script src="studio.js"></script>
+</body>
+</html>
