@@ -96,6 +96,13 @@ const SITE_DATA = {
   posts: [
     {
       date: "2026-08-02",
+      title: "J1939 Isn't a Cable — It's a Dictionary for CAN",
+      file: "post.html?p=j1939-isn-t-a-cable-it-s-a-dictionary-for-can",
+      summary: "—",
+      tags: ["CAN", "J1939", "learning", "career", "automotive"]
+    },
+    {
+      date: "2026-08-02",
       title: "LIN Bus Explained: Why Vehicles Don't Use CAN for Everything",
       file: "post.html?p=LIN_Bus_Article",
       summary: "A modern vehicle can have anywhere from 70 to 150+ electronic control units. Every window switch, mirror motor, HVAC blend door, and seat po",
