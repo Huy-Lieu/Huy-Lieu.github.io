@@ -14,7 +14,7 @@ var TOK_KEY="budaica_gh_token";
 var MOODS=["💡","🧠","📡","🔧","⚡","🎯","🚀","📄","🌧️","😤","☕","🏁"];
 var TAGS=["learning","life","career","website","SPI","UART","I2C","CAN","C","python","HIL","automotive"];
 
-var state={mood:"💡",nTags:["learning"],pTags:["learning"],slugTouched:false};
+var state={mood:"💡",nTags:["learning"],pTags:["learning"],slugTouched:false,writing:false};
 
 /* ---------------- tiny helpers ---------------- */
 function $(id){return document.getElementById(id);}
@@ -65,6 +65,51 @@ function insertBlock(src,marker,block){
   if(i<0)throw new Error("couldn't find `"+marker+"` in data.js — use the Copy button and paste manually");
   var at=i+marker.length;
   return src.slice(0,at)+"\n"+block+src.slice(at);
+}
+
+/* ---------------- 409-safe writes ----------------
+   GitHub refuses a PUT/DELETE with 409 when the sha we hold is stale
+   (its read cache lags a few seconds after any write, or two writes race).
+   Cure: re-read the file fresh, redo the change, try again — up to 3x. */
+function delay(ms){return new Promise(function(res){setTimeout(res,ms);});}
+function putFileRetry(path,contentB64,msg,attempts){
+  attempts=attempts||3;
+  return ghGet(path).then(function(f){
+    return ghPut(path,contentB64,f?f.sha:null,msg);
+  }).catch(function(e){
+    if(attempts>1&&/409/.test(e.message)){
+      status("version moved — re-reading and retrying…","busy");
+      return delay(1200).then(function(){return putFileRetry(path,contentB64,msg,attempts-1);});
+    }
+    throw e;
+  });
+}
+function deleteFileRetry(path,msg,attempts){
+  attempts=attempts||3;
+  return ghGet(path).then(function(f){
+    if(!f)return null;
+    return ghDelete(path,f.sha,msg);
+  }).catch(function(e){
+    if(attempts>1&&/409/.test(e.message)){
+      return delay(1200).then(function(){return deleteFileRetry(path,msg,attempts-1);});
+    }
+    throw e;
+  });
+}
+/* data.js writer with fresh-read retry. mutate(text) -> newText, or null to skip the write. */
+function writeDataJs(mutate,msg,attempts){
+  attempts=attempts||3;
+  return getDataJs().then(function(d){
+    var next=mutate(d.text);
+    if(next===null)return null;
+    return ghPut("data.js",b64e(next),d.sha,msg);
+  }).catch(function(e){
+    if(attempts>1&&/409/.test(e.message)){
+      status("data.js moved — re-reading and retrying…","busy");
+      return delay(1200).then(function(){return writeDataJs(mutate,msg,attempts-1);});
+    }
+    throw e;
+  });
 }
 
 /* ---------------- token setup ---------------- */
@@ -158,19 +203,21 @@ $("nDate").addEventListener("change",renderNotePreview);
 $("nTagAdd").addEventListener("click",function(){addCustom($("nTagCustom"),state.nTags,function(){renderNTags();renderNotePreview();});});
 
 $("nPublish").addEventListener("click",function(){
+  if(state.writing){status("one operation at a time — still writing…","err");return;}
   if(!tok()){status("add your token in setup first","err");return;}
   if(!$("nText").value.trim()){status("write something first","err");return;}
   var date=$("nDate").value||today();
   var block=noteBlock();
+  var btn=this;
+  state.writing=true;btn.disabled=true;
   status("publishing note…","busy");
-  getDataJs().then(function(d){
-    var next=insertBlock(d.text,"entries: [",block);
-    return ghPut("data.js",b64e(next),d.sha,"note "+date+" via studio");
-  }).then(function(){
+  writeDataJs(function(text){return insertBlock(text,"entries: [",block);},"note "+date+" via studio")
+  .then(function(){
     status("✓ note published — live on notes.html in ~1 minute","ok");
     $("nText").value="";
     renderNotePreview();
-  }).catch(function(e){status(e.message,"err");});
+  }).catch(function(e){status(e.message,"err");})
+  .then(function(){state.writing=false;btn.disabled=false;});
 });
 $("nCopy").addEventListener("click",function(){
   navigator.clipboard.writeText(noteBlock()).then(function(){
@@ -314,6 +361,7 @@ function postBlock(slug,title,summary){
 }
 
 $("pPublish").addEventListener("click",function(){
+  if(state.writing){status("one operation at a time — still writing…","err");return;}
   if(!tok()){status("add your token in setup first","err");return;}
   var title=$("pTitle").value.trim();
   var slug=$("pSlug").value.trim();
@@ -322,22 +370,25 @@ $("pPublish").addEventListener("click",function(){
   if(!title||!body){status("title and body are required","err");return;}
   if(!slug){status("slug is required (it becomes the filename)","err");return;}
   if(!/^[a-z0-9_][a-z0-9-_]*$/.test(slug)){status("slug: lowercase letters, numbers, hyphens, underscore only","err");return;}
-  status("writing posts/"+slug+".md…","busy");
+  var btn=this;
+  state.writing=true;btn.disabled=true;
+  status("checking posts/"+slug+".md…","busy");
   ghGet("posts/"+slug+".md").then(function(existing){
     if(existing&&!window.confirm("posts/"+slug+".md already exists — overwrite it?")){
       throw new Error("cancelled — nothing was written");
     }
-    return ghPut("posts/"+slug+".md",b64e(fullMd()),existing?existing.sha:null,"post "+slug+" via studio");
+    status("writing posts/"+slug+".md…","busy");
+    return putFileRetry("posts/"+slug+".md",b64e(fullMd()),"post "+slug+" via studio");
   }).then(function(){
     status("registering in data.js…","busy");
-    return getDataJs();
-  }).then(function(d){
-    if(d.text.indexOf("post.html?p="+slug)>-1)return null; /* already registered */
-    var next=insertBlock(d.text,"posts: [",postBlock(slug,title,summary));
-    return ghPut("data.js",b64e(next),d.sha,"register post "+slug+" via studio");
+    return writeDataJs(function(text){
+      if(text.indexOf("post.html?p="+slug)>-1)return null; /* already registered */
+      return insertBlock(text,"posts: [",postBlock(slug,title,summary));
+    },"register post "+slug+" via studio");
   }).then(function(){
     status("✓ post published — posts.html updates in ~1 min · read it at post.html?p="+slug,"ok");
-  }).catch(function(e){status(e.message,"err");});
+  }).catch(function(e){status(e.message,"err");})
+  .then(function(){state.writing=false;btn.disabled=false;});
 });
 $("pCopy").addEventListener("click",function(){
   var slug=$("pSlug").value.trim()||"your-slug";
@@ -385,14 +436,16 @@ function loadManage(){
     SD.entries.forEach(function(e){
       var r=manageRow(e.date,(e.mood?e.mood+" ":"")+esc(e.text),"✕ delete");
       r.del.addEventListener("click",function(){
+        if(state.writing){status("one operation at a time — still writing…","err");return;}
         if(!window.confirm("Delete the note from "+e.date+"?\n\n"+e.text.slice(0,140)+(e.text.length>140?"…":"")))return;
+        state.writing=true;
         status("deleting note…","busy");
-        getDataJs().then(function(d){
-          return ghPut("data.js",b64e(removeBlock(d.text,"text: "+jstr(e.text))),d.sha,"delete note "+e.date+" via studio");
-        }).then(function(){
-          status("✓ note deleted — notes.html updates in ~1 min","ok");
-          loadManage();
-        }).catch(function(err){status(err.message,"err");});
+        writeDataJs(function(text){return removeBlock(text,"text: "+jstr(e.text));},"delete note "+e.date+" via studio")
+        .then(function(){
+          status("✓ note deleted — refreshing list…","ok");
+          return delay(900).then(loadManage);
+        }).catch(function(err){status(err.message,"err");})
+        .then(function(){state.writing=false;});
       });
       nEl.appendChild(r.row);
     });
@@ -401,17 +454,18 @@ function loadManage(){
       var slug=m?m[1]:null;
       var r=manageRow(p.date,esc(p.title)+(slug?' <span style="opacity:.5">· '+esc(slug)+'</span>':''),"✕ delete");
       r.del.addEventListener("click",function(){
+        if(state.writing){status("one operation at a time — still writing…","err");return;}
         if(!slug){status("that post is a hand-written HTML page — delete it directly in the repo","err");return;}
         if(!window.confirm("Delete post \""+p.title+"\"?\n\nThis removes the registration AND posts/"+slug+".md\n(images in posts/img/ stay in the library)."))return;
+        state.writing=true;
         status("deleting post…","busy");
-        getDataJs().then(function(d){
-          return ghPut("data.js",b64e(removeBlock(d.text,jstr("post.html?p="+slug))),d.sha,"unregister post "+slug+" via studio");
-        }).then(function(){return ghGet("posts/"+slug+".md");})
-          .then(function(f2){return f2?ghDelete("posts/"+slug+".md",f2.sha,"delete post "+slug+" via studio"):null;})
-          .then(function(){
-            status("✓ post deleted — posts.html updates in ~1 min","ok");
-            loadManage();
-          }).catch(function(err){status(err.message,"err");});
+        writeDataJs(function(text){return removeBlock(text,jstr("post.html?p="+slug));},"unregister post "+slug+" via studio")
+        .then(function(){return deleteFileRetry("posts/"+slug+".md","delete post "+slug+" via studio");})
+        .then(function(){
+          status("✓ post deleted — refreshing list…","ok");
+          return delay(900).then(loadManage);
+        }).catch(function(err){status(err.message,"err");})
+        .then(function(){state.writing=false;});
       });
       pEl.appendChild(r.row);
     });
