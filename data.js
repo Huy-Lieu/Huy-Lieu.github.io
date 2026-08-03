@@ -132,12 +132,6 @@ const SITE_DATA = {
       text: "Full-duplex finally clicked: both directions AT THE SAME TIME — like a phone call, not a walkie-talkie. SPI is full-duplex because MISO and MOSI have separate wires. Half-duplex = taking turns. Simplex = one-way street."
     },
     {
-      date: "2026-07-25",
-      mood: "🌧️",
-      tags: ["life"],
-      text: "Long day at work, brain was empty. Still opened the notes and wrote two lines. Hard work buys freedom — even on the days it doesn't feel like it."
-    },
-    {
       date: "2026-07-20",
       mood: "🎯",
       tags: ["career", "learning"],
