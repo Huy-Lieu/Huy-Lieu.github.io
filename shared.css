@@ -48,7 +48,33 @@ nav{
 }
 .nav-links a::before{content:"/ ";color:var(--amber);opacity:.7}
 .nav-links a:hover,.nav-links a.here{color:var(--amber-soft)}
-@media(max-width:720px){.nav-links{gap:1rem}.nav-links a{font-size:.72rem}}
+/* ---- mobile nav: hamburger dropdown (<=720px) ----
+   The toggle is invisible on desktop. On phones the list drops below the
+   logo row INSIDE the nav (so the page's own bg + blur still cover it),
+   with full-width thumb-sized rows. */
+.nav-toggle{display:none}
+@media(max-width:720px){
+  nav{flex-wrap:wrap;padding:.8rem 5vw}
+  .nav-toggle{
+    display:block;font-family:var(--mono);font-size:1.15rem;line-height:1;
+    background:transparent;color:var(--amber);border:1px solid var(--card-border);
+    border-radius:8px;padding:.45rem .7rem;cursor:pointer;
+  }
+  .nav-links{display:none;flex-basis:100%;flex-direction:column;gap:0;padding:.3rem 0 .2rem}
+  .nav-links.open{display:flex}
+  .nav-links li{border-top:1px solid var(--card-border)}
+  .nav-links li:first-child{border-top:none}
+  .nav-links a{display:block;padding:.85rem .2rem;font-size:1rem}
+  .nav-links a::before{content:"~/ "}
+}
+
+/* phones: chips get thumb-sized, form text never triggers iOS zoom */
+@media(pointer:coarse){
+  .fchip{padding:.55rem .85rem;font-size:.8rem}
+}
+@media(max-width:720px){
+  textarea,input,select{font-size:16px !important}
+}
 
 main{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:3.5rem 5vw 5rem}
 

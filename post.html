@@ -93,6 +93,7 @@ article td:first-child{color:var(--ink);font-weight:500}
 
 <nav>
   <a class="logo" href="index.html">huy<span>@</span>budaica<span>:~$</span></a>
+  <button class="nav-toggle" id="navToggle" aria-label="menu" aria-expanded="false">☰</button>
   <ul class="nav-links">
     <li><a href="index.html">home</a></li>
     <li><a href="notes.html">notes</a></li>
@@ -180,7 +181,7 @@ article td:first-child{color:var(--ink);font-weight:500}
     }
     renderer.image=function(href,title,text){
       var t=title?' title="'+title+'"':"";
-      return '<img src="'+fixUrl(href)+'" alt="'+(text||"")+'"'+t+">";
+      return '<img src="'+fixUrl(href)+'" alt="'+(text||"")+'"'+t+' loading="lazy" decoding="async">';
     };
     renderer.link=function(href,title,text){
       var t=title?' title="'+title+'"':"";
@@ -240,5 +241,6 @@ article td:first-child{color:var(--ink);font-weight:500}
   });
 })();
 </script>
+<script src="nav.js"></script>
 </body>
 </html>
