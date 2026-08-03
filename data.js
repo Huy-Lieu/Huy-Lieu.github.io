@@ -96,6 +96,13 @@ const SITE_DATA = {
   posts: [
     {
       date: "2026-08-02",
+      title: "Pointers, Function Pointers, and Callbacks: The C Foundations Behind Embedded Drivers",
+      file: "post.html?p=Pointers_Function_Pointers_Callbacks_Article",
+      summary: "Every embedded driver you'll ever read — SPI, UART, I²C, CAN — leans on three C concepts underneath the protocol logic: pointers, function pointers, and callbacks. Skip…",
+      tags: ["learning", "SPI", "UART", "CAN"]
+    },
+    {
+      date: "2026-08-02",
       title: "J1939 Isn't a Cable — It's a Dictionary for CAN",
       file: "post.html?p=J1939",
       summary: "The first time most people encounter J1939, it's through a connector — a 9-pin Deutsch fitting on a heavy-duty truck or piece of off-road equipment.",
