@@ -2,11 +2,11 @@
 
 ## The Problem CAN Wasn't Built to Solve
 
-A modern vehicle can have anywhere from 70 to 150+ electronic control units. Every window switch, mirror motor, HVAC blend door, and seat position sensor needs some way to talk to the rest of the car. The obvious answer might be: just put everything on CAN. It's fast, it's noise-resistant, it's the automotive standard.
+A modern vehicle can have anywhere from 70 to 150+ electronic control units. Every window switch, mirror motor, HVAC blend door, and seat position sensor needs some way to talk to the rest of the car. **The obvious answer might be: just put everything on CAN**. It's fast, it's noise-resistant, it's the automotive standard.
 
-But CAN transceivers cost money, CAN wiring adds weight and complexity, and none of those functions actually need CAN's speed or its multi-master arbitration. A window switch doesn't need to win a priority fight against an airbag deployment message. It needs to tell the body control module "button pressed" and that's it.
+**But CAN transceivers cost money**, CAN wiring adds weight and complexity, and none of those functions actually need CAN's speed or its multi-master arbitration. A window switch doesn't need to win a priority fight against an airbag deployment message. It needs to tell the body control module "button pressed" and that's it.
 
-This is the gap LIN was built to fill: a single-wire, low-cost network for the non-safety-critical, low-bandwidth corners of the vehicle — window switches, mirrors, seat modules, HVAC actuators, and similar body-domain functions.
+**This is the gap LIN was built to fill: a single-wire, low-cost network for the non-safety-critical, low-bandwidth corners of the vehicle — window switches, mirrors, seat modules, HVAC actuators, and similar body-domain functions.**
 
 ## Where LIN Sits in the Speed Hierarchy
 
@@ -25,6 +25,8 @@ That's not a limitation so much as a deliberate tradeoff. LIN uses a single wire
 This is the part of LIN that actually matters most, and it's the part most people gloss over.
 
 CAN is multi-master. Any node can attempt to transmit at any time, and arbitration sorts out who wins. LIN throws that model out entirely. A LIN network has exactly one master — usually the body control module — and every other node on the bus is a slave. Slaves never initiate communication. They only speak when the master asks them to, and not a moment before.
+
+![CAN Communication Protocol](img/Image-Showing-Point-Point-Wiring-Connection-CAN-Protocol.png)
 
 The master doesn't just sit there waiting for something to happen. It works through a fixed, repeating **schedule table** — a predetermined sequence of message IDs that it polls, one after another, on a loop. If a window-lift module needs to report that a button was pressed, it can't just announce that. It has to wait for its slot in the schedule table to come around, get polled, and only then respond.
 
