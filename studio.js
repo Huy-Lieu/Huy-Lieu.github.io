@@ -258,11 +258,75 @@ function wrapSel(before,after,placeholder){
 function linePrefix(prefix){
   var el=ta(),s=el.selectionStart,e=el.selectionEnd;
   var start=el.value.lastIndexOf("\n",s-1)+1;
-  var lines=el.value.slice(start,e).split("\n").map(function(l){return l?prefix+l:l;}).join("\n");
+  var lines=el.value.slice(start,e).split("\n").map(function(l){return prefix+l;}).join("\n");
   el.value=el.value.slice(0,start)+lines+el.value.slice(e);
   el.selectionStart=el.selectionEnd=start+lines.length;
   el.focus();renderPostPreview();
 }
+/* list button: caret on any line -> marker appears there (even empty);
+   multi-line selection -> convert each line (ordered lists get REAL numbers) */
+function startList(marker,ordered){
+  var el=ta(),s=el.selectionStart,e=el.selectionEnd;
+  var start=el.value.lastIndexOf("\n",s-1)+1;
+  if(s!==e){
+    var n=0;
+    var lines=el.value.slice(start,e).split("\n").map(function(l){
+      if(!l.trim())return l;
+      n++;
+      return (ordered?n+". ":marker)+l;
+    }).join("\n");
+    el.value=el.value.slice(0,start)+lines+el.value.slice(e);
+    el.selectionStart=el.selectionEnd=start+lines.length;
+  }else{
+    var line=el.value.slice(start,s);
+    if(/^\s*(- |\d+\. )/.test(line)){el.focus();return;} /* already a list item */
+    el.value=el.value.slice(0,start)+marker+el.value.slice(start);
+    el.selectionStart=el.selectionEnd=s+marker.length;
+  }
+  el.focus();renderPostPreview();
+}
+/* Word-like list typing: Enter continues the list (real next number),
+   Enter on an empty item leaves the list, Tab / Shift+Tab indents */
+$("pBody").addEventListener("keydown",function(ev){
+  var el=this;
+  if(ev.key==="Enter"){
+    if(el.selectionStart!==el.selectionEnd)return;
+    var s=el.selectionStart;
+    var start=el.value.lastIndexOf("\n",s-1)+1;
+    var before=el.value.slice(start,s);
+    var mb=before.match(/^(\s*)- (.*)$/);
+    var mo=before.match(/^(\s*)(\d+)\. (.*)$/);
+    var next,content;
+    if(mb){next=mb[1]+"- ";content=mb[2];}
+    else if(mo){next=mo[1]+(parseInt(mo[2],10)+1)+". ";content=mo[3];}
+    else return;
+    ev.preventDefault();
+    if(content.trim()===""){
+      /* empty item -> remove the marker line entirely, land on a blank line */
+      el.value=el.value.slice(0,start)+el.value.slice(s);
+      el.selectionStart=el.selectionEnd=start;
+    }else{
+      var ins="\n"+next;
+      el.value=el.value.slice(0,s)+ins+el.value.slice(s);
+      el.selectionStart=el.selectionEnd=s+ins.length;
+    }
+    renderPostPreview();
+  }else if(ev.key==="Tab"){
+    var st=el.value.lastIndexOf("\n",el.selectionStart-1)+1;
+    if(!/^\s*(- |\d+\. )/.test(el.value.slice(st)))return;
+    ev.preventDefault();
+    if(ev.shiftKey){
+      if(el.value.slice(st,st+2)==="  "){
+        el.value=el.value.slice(0,st)+el.value.slice(st+2);
+        el.selectionStart=el.selectionEnd=Math.max(st,el.selectionStart-2);
+      }
+    }else{
+      el.value=el.value.slice(0,st)+"  "+el.value.slice(st);
+      el.selectionStart=el.selectionEnd=el.selectionStart+2;
+    }
+    renderPostPreview();
+  }
+});
 
 var ACTIONS={
   h2:function(){linePrefix("## ");},
@@ -273,8 +337,8 @@ var ACTIONS={
   codeblock:function(){wrapSel("\n```c\n","\n```\n","// code here");},
   callout:function(){linePrefix("> ");},
   table:function(){insertAtCursor("\n| Col A | Col B | Col C |\n|-------|-------|-------|\n| a | b | c |\n");},
-  ul:function(){linePrefix("- ");},
-  ol:function(){linePrefix("1. ");},
+  ul:function(){startList("- ",false);},
+  ol:function(){startList("1. ",true);},
   link:function(){wrapSel("[","](https://)","link text");},
   hr:function(){insertAtCursor("\n---\n");},
   img:function(){$("imgPicker").click();}
