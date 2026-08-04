@@ -25,8 +25,9 @@
   document.addEventListener("keydown",function(e){
     if(e.key==="Escape")setOpen(false);
   });
-  /* rotating phone to landscape / widening window resets state */
+  /* widening the window past this page's breakpoint resets state —
+     detected from the toggle's own visibility, not a hardcoded width */
   window.addEventListener("resize",function(){
-    if(window.innerWidth>720)setOpen(false);
+    if(window.getComputedStyle(btn).display==="none")setOpen(false);
   });
 })();

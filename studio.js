@@ -539,8 +539,24 @@ function beginImport(f,slug,row,btn){
       '</div><div class="imp-sum">'+esc(summary)+'</div>';
     var chipBox=document.createElement("div");chipBox.className="chiprow";
     panel.appendChild(chipBox);
-    function rerender(){buildChips(chipBox,TAGS,picked,rerender,false);}
+    /* chips = the predefined vocabulary + any custom tags you add below;
+       customs live only in `picked`, so toggling one off makes it vanish */
+    function extras(){return picked.filter(function(t){return TAGS.indexOf(t)<0;});}
+    function rerender(){buildChips(chipBox,TAGS.concat(extras()),picked,rerender,false);}
     rerender();
+    var customRow=document.createElement("div");customRow.className="imp-custom";
+    var cin=document.createElement("input");cin.type="text";cin.className="imp-tag-input";
+    cin.placeholder="custom tag… (e.g. ISO26262)";
+    var cbtn=document.createElement("button");cbtn.className="btn ghost imp-add";cbtn.textContent="＋ add";
+    customRow.appendChild(cin);customRow.appendChild(cbtn);
+    panel.appendChild(customRow);
+    function addCustom(){
+      var v=cin.value.trim().replace(/\s+/g,"-");
+      if(!v||picked.indexOf(v)>-1){cin.value="";return;}
+      picked.push(v);cin.value="";rerender();cin.focus();
+    }
+    cbtn.addEventListener("click",addCustom);
+    cin.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();addCustom();}});
     var btns=document.createElement("div");btns.className="actions imp-actions";
     var ok=document.createElement("button");ok.className="btn";ok.textContent="shelve it ✓";
     var no=document.createElement("button");no.className="btn ghost";no.textContent="cancel";

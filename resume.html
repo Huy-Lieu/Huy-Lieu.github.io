@@ -66,6 +66,23 @@ nav{
 .nav-links a:hover{color:var(--amber-strong)}
 .nav-links a.exit{color:var(--amber)}
 @media(max-width:900px){.nav-links{display:none}}
+/* mobile nav: hamburger <=900px (pairs with the links-off rule above) */
+.nav-toggle{display:none}
+@media(max-width:900px){
+  nav{flex-wrap:wrap}
+  .nav-toggle{
+    display:block;font-family:var(--mono);font-size:1.1rem;line-height:1;
+    background:transparent;color:var(--amber);border:1px solid var(--line);
+    border-radius:8px;padding:.45rem .7rem;cursor:pointer;
+  }
+  .nav-links{display:none;flex-basis:100%;flex-direction:column;gap:0;padding:.3rem 0 .2rem}
+  .nav-links.open{display:flex}
+  .nav-links li{border-top:1px solid var(--line)}
+  .nav-links li:first-child{border-top:none}
+  .nav-links a{display:block;padding:.85rem .2rem;font-size:1rem}
+  .nav-links a::before{content:"~/ "}
+  .nav-links .navpal{margin:.5rem 0 .2rem}
+}
 section{position:relative;padding:4.5rem 5vw;max-width:1080px;margin:0 auto}
 .kicker{
   font-family:var(--mono);font-size:.74rem;letter-spacing:.28em;
